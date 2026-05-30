@@ -1,0 +1,43 @@
+############################ # Build ############################ 
+ManagementKimThoa/[Bb]in/ 
+ManagementKimThoa/[Oo]bj/ 
+ManagementKimThoa/[Ll]og/ 
+ManagementKimThoa/[Ll]ogs/
+
+############################ # Visual Studio / Rider ############################ 
+.vs/ 
+.idea/ 
+*.suo 
+*.user 
+*.userosscache 
+*.sln.docstates 
+*.swp 
+*.swo
+
+############################ # Visual Studio for Mac ############################ 
+ManagementKimThoa/*.userprefs
+
+############################ # ASP.NET Scaffolding ############################ 
+ManagementKimThoa/ScaffoldingReadMe.txt
+
+############################ # NuGet ############################ 
+ManagementKimThoa/*.nupkg packages/ 
+ManagementKimThoa/project.lock.json 
+ManagementKimThoa/project.fragment.lock.json 
+ManagementKimThoa/artifacts/
+
+
+############################ # macOS ############################ 
+.DS_Store 
+.AppleDouble 
+.LSOverride Icon? 
+._* 
+.Spotlight-V100 
+.Trashes
+
+
+############################ # Environment / Secrets ############################ 
+ManagementKimThoa/.env 
+ManagementKimThoa/.env.* 
+ManagementKimThoa/secrets.json 
+ManagementKimThoa/appsettings.Development.json
