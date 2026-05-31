@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection.Emit;
+﻿using ManagementKimThoa.Models;
 using Microsoft.EntityFrameworkCore;
 namespace ManagementKimThoa.Contexts
 {
@@ -11,12 +10,32 @@ namespace ManagementKimThoa.Contexts
         {
         }
 
-        // Fluent API (optional)
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Branch> Branches { get; set; }
+
+        public DbSet<Account> Accounts { get; set; }
+
+        public DbSet<IDCard> IDCards { get; set; }
+
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<OtherInfor> OtherInfors { get; set; }
+
+        public DbSet<HealthInsurance> HealthInsurances { get; set; }
+
+        public DbSet<BankInfo> BankInfos { get; set; }
+
+        public DbSet<Note> Notes { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-           
+            // Tự động load tất cả IEntityTypeConfiguration
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

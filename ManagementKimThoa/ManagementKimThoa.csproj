@@ -33,6 +33,7 @@
     <None Remove="Areas\Admin\Views\Dashboard\" />
     <None Remove="Views\Home\" />
     <None Remove="Models\" />
+    <None Remove="Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
@@ -57,6 +58,7 @@
     <Folder Include="wwwroot\assets\img\defaults\" />
     <Folder Include="wwwroot\assets\img\defaults\avatars\" />
     <Folder Include="wwwroot\assets\img\defaults\icons\" />
+    <Folder Include="Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\assets\img\" />
