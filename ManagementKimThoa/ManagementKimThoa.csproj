@@ -56,10 +56,12 @@
     <Folder Include="wwwroot\assets\img\" />
     <Folder Include="wwwroot\assets\img\defaults\" />
     <Folder Include="wwwroot\assets\img\defaults\avatars\" />
+    <Folder Include="wwwroot\assets\img\defaults\icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\assets\img\" />
     <Content Remove="wwwroot\assets\img\defaults\" />
     <Content Remove="wwwroot\assets\img\defaults\avatars\" />
+    <Content Remove="wwwroot\assets\img\defaults\icons\" />
   </ItemGroup>
 </Project>
