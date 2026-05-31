@@ -21,7 +21,7 @@ namespace ManagementKimThoa.Models
 
         public short? RoleId { get; set; }
 
-        public short IsStatus { get; set; }
+        public short? IsStatus { get; set; }
 
         public virtual BankInfo? BankInfo { get; set; }
 

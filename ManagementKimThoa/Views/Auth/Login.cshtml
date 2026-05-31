@@ -1,4 +1,10 @@
 
+@model ManagementKimThoa.ViewModels.Account.LoginViewModel
+@using ManagementKimThoa.Constants
+
+@{
+    Layout = null;
+}
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
 
@@ -10,7 +16,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>Phoenix</title>
+    <title>Login</title>
 
     <!-- ===============================================-->
     <!--    Favicons-->
@@ -87,22 +93,72 @@
                                             <h3 class="text-body-highlight">Sign In</h3>
                                             <p class="text-body-tertiary">Get access to your account</p>
                                         </div>
-                                       
-                                        <div class="mb-3 text-start">
-                                            <label class="form-label" for="email">Username</label>
-                                            <div class="form-icon-container">
-                                            <input class="form-control form-icon-input" id="text" type="text" placeholder="Username" /><span class="fas fa-user text-body fs-9 form-icon"></span></div>
-                                        </div>
-                                        <div class="mb-3 text-start">
-                                            <label class="form-label" for="password">Password</label>
-                                            <div class="form-icon-container" data-password="data-password"><input class="form-control form-icon-input pe-6" id="password" type="password" placeholder="Password" data-password-input="data-password-input" /><span class="fas fa-key text-body fs-9 form-icon"></span><button class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary" data-password-toggle="data-password-toggle"><span class="uil uil-eye show"></span><span class="uil uil-eye-slash hide"></span></button></div>
-                                        </div>
-                                        <div class="row flex-between-center mb-7">
-                                            <div class="col-auto">
-                                                <div class="form-check mb-0"><input class="form-check-input" id="basic-checkbox" type="checkbox" checked="checked" /><label class="form-check-label mb-0" for="basic-checkbox">Remember me</label></div>
+
+                                        <form id="loginForm"
+                                              method="post"
+                                              action="@RouteConstant.Login">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="mb-3 text-start">
+                                                <label class="form-label">Username</label>
+
+                                                <div class="form-icon-container">
+                                                    <input id="username"
+                                                           name="Username"
+                                                           value="@Model?.Username"
+                                                           class="form-control form-icon-input"
+                                                           type="text"
+                                                           placeholder="Username" />
+
+                                                    <span class="fas fa-user text-body fs-9 form-icon"></span>
+                                                </div>
                                             </div>
-                                            <div class="col-auto"><a class="fs-9 fw-semibold" href="#">Forgot Password?</a></div>
-                                        </div><button class="btn btn-primary w-100 mb-3">Sign In</button>
+
+                                            <div class="mb-3 text-start">
+                                                <label class="form-label">Password</label>
+
+                                                <div class="form-icon-container" data-password="data-password">
+
+                                                    <input id="password"
+                                                           name="Password"
+                                                           class="form-control form-icon-input pe-6"
+                                                           type="password"
+                                                           placeholder="Password" />
+
+                                                    <span class="fas fa-key text-body fs-9 form-icon"></span>
+
+                                                    <button type="button"
+                                                            class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
+                                                            data-password-toggle="data-password-toggle">
+                                                        <span class="uil uil-eye show"></span>
+                                                        <span class="uil uil-eye-slash hide"></span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row flex-between-center mb-7">
+                                                <div class="col-auto">
+                                                    <div class="form-check mb-0">
+                                                        <input name="RememberMe"
+                                                               class="form-check-input"
+                                                               id="rememberMe"
+                                                               type="checkbox" />
+
+                                                        <label class="form-check-label mb-0" for="rememberMe">
+                                                            Remember me
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit"
+                                                    class="btn btn-primary w-100 mb-3">
+                                                Sign In
+                                            </button>
+
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +168,9 @@
             </div>
         </div>
     </main>
-  
+
+    @await Html.PartialAsync("_Toast")
+
     <script src="~/vendors/popper/popper.min.js"></script>
     <script src="~/vendors/bootstrap/bootstrap.min.js"></script>
     <script src="~/vendors/anchorjs/anchor.min.js"></script>
@@ -123,6 +181,159 @@
     <script src="~/vendors/feather-icons/feather.min.js"></script>
     <script src="~/vendors/dayjs/dayjs.min.js"></script>
     <script src="~/assets/js/phoenix.js"></script>
+
+    <script>document.addEventListener("DOMContentLoaded", function () {
+            const toastElList = document.querySelectorAll('.toast-item');
+            toastElList.forEach(function (item) {
+                const toast = new bootstrap.Toast(item, { delay: 3000 });
+                toast.show();
+            });
+        });</script>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("loginForm");
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const rememberCheckbox =
+        document.getElementById("rememberMe");
+
+    const token =
+        document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        ).value;
+
+    // ===== AUTO LOGIN =====
+    const remembered =
+        sessionStorage.getItem("remember_login");
+
+    if (remembered) {
+        try {
+
+            const data =
+                JSON.parse(remembered);
+
+            usernameInput.value =
+                data.username || "";
+
+            passwordInput.value =
+                data.password || "";
+
+            rememberCheckbox.checked = true;
+
+            if (data.username &&
+                data.password) {
+
+                login(
+                    data.username,
+                    data.password,
+                    true
+                );
+            }
+        }
+        catch {
+            sessionStorage.removeItem(
+                "remember_login"
+            );
+        }
+    }
+
+    // ===== SUBMIT FORM =====
+    form.addEventListener(
+        "submit",
+        async function (e) {
+
+        e.preventDefault();
+
+        await login(
+            usernameInput.value,
+            passwordInput.value,
+            rememberCheckbox.checked
+        );
+    });
+
+    async function login(
+        username,
+        password,
+        rememberMe) {
+
+        try {
+
+            const response = await fetch(
+                "@RouteConstant.Login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        "RequestVerificationToken":
+                            token
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
+                });
+
+            const result =
+                await response.json();
+
+            if (!result.success) {
+
+                sessionStorage.removeItem(
+                    "remember_login"
+                );
+
+                showToast(
+                    "error",
+                    result.message
+                );
+                return;
+            }
+
+            // save only success
+            if (rememberMe) {
+
+                sessionStorage.setItem(
+                    "remember_login",
+                    JSON.stringify({
+                        username,
+                        password
+                    })
+                );
+            }
+            else {
+
+                sessionStorage.removeItem(
+                    "remember_login"
+                );
+            }
+
+            showToast(
+                "success",
+                result.message
+            );
+
+            setTimeout(() => {
+                window.location.href =
+                    result.redirectUrl;
+            }, 1200);
+        }
+        catch {
+
+            showToast(
+                "error",
+                'Có lỗi xảy ra!'
+            );
+        }
+    }
+});
+    </script>
 </body>
 
 </html>

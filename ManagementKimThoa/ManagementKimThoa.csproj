@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.20" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.10" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Contexts\" />
@@ -28,12 +29,18 @@
     <None Remove="DTOs\" />
     <None Remove="Services\" />
     <None Remove="Services\Interfaces\" />
-    <None Remove="Repos\" />
     <None Remove="Repos\Interfaces\" />
     <None Remove="Areas\Admin\Views\Dashboard\" />
     <None Remove="Views\Home\" />
     <None Remove="Models\" />
     <None Remove="Configurations\" />
+    <None Remove="Constants\" />
+    <None Remove="Repositories\" />
+    <None Remove="Commons\" />
+    <None Remove="ViewModels\" />
+    <None Remove="ViewModels\Account\" />
+    <None Remove="DTOs\User\" />
+    <None Remove="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
@@ -49,8 +56,7 @@
     <Folder Include="DTOs\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
-    <Folder Include="Repos\" />
-    <Folder Include="Repos\Interfaces\" />
+    <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Models\" />
@@ -60,6 +66,13 @@
     <Folder Include="wwwroot\assets\img\defaults\icons\" />
     <Folder Include="Configurations\" />
     <Folder Include="wwwroot\assets\img\bgs\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Commons\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="ViewModels\Account\" />
+    <Folder Include="DTOs\User\" />
+    <Folder Include="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\assets\img\" />

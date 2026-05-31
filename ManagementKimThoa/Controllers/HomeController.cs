@@ -1,20 +1,27 @@
-﻿using System.Diagnostics;
+﻿using System.Text.Json;
+using ManagementKimThoa.Constants;
+using ManagementKimThoa.DTOs.User;
+using ManagementKimThoa.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagementKimThoa.Controllers;
 
+
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
+    [Route(RouteConstant.Index)]
     public IActionResult Index()
     {
-        return Redirect("/admin/dashboard");
+        var userJson = HttpContext.Session.GetString(SessionConstant.CurrentUser);
+
+        if (!string.IsNullOrEmpty(userJson))
+        {
+            var currentUser = JsonSerializer.Deserialize<UserSession>(userJson);
+            ViewBag.currentUser = currentUser;
+        }
+
+        return View();
     }
 
 }
