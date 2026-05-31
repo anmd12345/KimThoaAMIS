@@ -31,6 +31,8 @@
     <None Remove="Repos\" />
     <None Remove="Repos\Interfaces\" />
     <None Remove="Areas\Admin\Views\Dashboard\" />
+    <None Remove="Views\Home\" />
+    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
@@ -49,5 +51,15 @@
     <Folder Include="Repos\" />
     <Folder Include="Repos\Interfaces\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Models\" />
+    <Folder Include="wwwroot\assets\img\" />
+    <Folder Include="wwwroot\assets\img\defaults\" />
+    <Folder Include="wwwroot\assets\img\defaults\avatars\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\assets\img\" />
+    <Content Remove="wwwroot\assets\img\defaults\" />
+    <Content Remove="wwwroot\assets\img\defaults\avatars\" />
   </ItemGroup>
 </Project>
