@@ -17,8 +17,6 @@ namespace ManagementKimThoa.Models
 
         public int? AccountId { get; set; }
 
-        public int? NoteId { get; set; }
-
         public short? RoleId { get; set; }
 
         public short? IsStatus { get; set; }
@@ -33,9 +31,9 @@ namespace ManagementKimThoa.Models
 
         public virtual Account? Account { get; set; }
 
-        public virtual Note? Note { get; set; }
-
         public virtual Role? Role { get; set; }
+
+        public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
     }
 }
 

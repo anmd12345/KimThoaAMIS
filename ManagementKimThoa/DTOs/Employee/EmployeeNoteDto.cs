@@ -1,8 +1,8 @@
 ﻿using System;
-namespace ManagementKimThoa.Models
+namespace ManagementKimThoa.DTOs.Employee
 {
-    public class Note
-    {
+	public class EmployeeNoteDto
+	{
         public int Id { get; set; }
 
         public string? NoteTitle { get; set; }
@@ -10,10 +10,6 @@ namespace ManagementKimThoa.Models
         public string? NoteDescription { get; set; }
 
         public string? DateCreateNote { get; set; }
-
-        public int UserId { get; set; }
-
-        public virtual User User { get; set; } = null!;
     }
 }
 

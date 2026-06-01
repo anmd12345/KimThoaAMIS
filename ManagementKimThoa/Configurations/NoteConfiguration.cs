@@ -22,6 +22,11 @@ namespace ManagementKimThoa.Configurations
             builder.Property(x => x.DateCreateNote)
                    .HasMaxLength(100)
                    .IsUnicode(false);
+
+            builder.HasOne(x => x.User)
+                   .WithMany(x => x.Notes)
+                   .HasForeignKey(x => x.UserId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

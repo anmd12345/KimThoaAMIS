@@ -15,6 +15,12 @@ namespace ManagementKimThoa.Models
 
         public string? ProfileScanUrl { get; set; }
 
+        public string? Nation { get; set; }
+
+        public string? PlaceOfBirthRegistrationProvince { get; set; }
+        public string? PlaceOfBirthRegistrationWard { get; set; }
+        public string? PlaceOfBirthRegistrationDetail { get; set; }
+
         public short? BranchId { get; set; }
 
         public short? PositionId { get; set; }

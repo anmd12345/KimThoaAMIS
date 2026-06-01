@@ -1,4 +1,8 @@
 ﻿using ManagementKimThoa.Contexts;
+using ManagementKimThoa.Repositories;
+using ManagementKimThoa.Repositories.Interfaces;
+using ManagementKimThoa.Services;
+using ManagementKimThoa.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +28,23 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+
+builder.Services.AddScoped<
+    IAuthRepository,
+    AuthRepository>();
+
+builder.Services.AddScoped<
+    IAuthService,
+    AuthService>();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 

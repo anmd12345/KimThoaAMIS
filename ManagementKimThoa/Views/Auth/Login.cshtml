@@ -55,6 +55,41 @@
             linkRTL.setAttribute('disabled', true);
             userLinkRTL.setAttribute('disabled', true);
         }</script>
+
+    <style>
+        #loginButton {
+            transition: all .25s ease;
+        }
+
+            #loginButton:active {
+                transform: scale(0.98);
+            }
+
+            #loginButton.loading {
+                pointer-events: none;
+                opacity: .85;
+            }
+
+                #loginButton.loading .login-text {
+                    display: none;
+                }
+
+        .btn-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            display: inline-block;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -153,7 +188,7 @@
                                                 </div>
                                             </div>
 
-                                            <button type="submit"
+                                            <button type="submit" id="loginButton"
                                                     class="btn btn-primary w-100 mb-3">
                                                 Sign In
                                             </button>
@@ -181,6 +216,50 @@
     <script src="~/vendors/feather-icons/feather.min.js"></script>
     <script src="~/vendors/dayjs/dayjs.min.js"></script>
     <script src="~/assets/js/phoenix.js"></script>
+
+    <script>const loginButton =
+            document.getElementById(
+                "loginButton"
+            );
+
+        function setLoading(isLoading) {
+
+            loginButton.disabled =
+                isLoading;
+
+            if (isLoading) {
+
+                loginButton.classList.add(
+                    "loading"
+                );
+
+                loginButton.innerHTML = `
+                <span class="d-flex
+                             align-items-center
+                             justify-content-center
+                             gap-2">
+                    <span class="btn-spinner">
+                    </span>
+
+                    <span>
+                        Signing In...
+                    </span>
+                </span>
+            `;
+            }
+            else {
+
+                loginButton.classList.remove(
+                    "loading"
+                );
+
+                loginButton.innerHTML = `
+                <span class="login-text">
+                    Sign In
+                </span>
+            `;
+            }
+        }</script>
 
     <script>document.addEventListener("DOMContentLoaded", function () {
             const toastElList = document.querySelectorAll('.toast-item');
@@ -263,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
         rememberMe) {
 
         try {
-
+            setLoading(true);
             const response = await fetch(
                 "@RouteConstant.Login",
                 {
@@ -293,6 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "error",
                     result.message
                 );
+                setLoading(false);
                 return;
             }
 
@@ -325,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 1200);
         }
         catch {
-
+            setLoading(false);
             showToast(
                 "error",
                 'Có lỗi xảy ra!'

@@ -2,6 +2,7 @@
 using ManagementKimThoa.Constants;
 using ManagementKimThoa.Contexts;
 using ManagementKimThoa.DTOs.User;
+using ManagementKimThoa.Services.Interfaces;
 using ManagementKimThoa.ViewModels.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,14 @@ namespace ManagementKimThoa.Controllers
 {
     public class AuthController : Controller
     {
+        private readonly IAuthService
+            _authService;
 
-        private readonly ApplicationDbContext _context;
-
-        public AuthController(ApplicationDbContext context)
+        public AuthController(
+            IAuthService authService)
         {
-            _context = context;
+            _authService =
+                authService;
         }
 
         [HttpGet]
@@ -24,15 +27,22 @@ namespace ManagementKimThoa.Controllers
         [Route(RouteConstant.Login)]
         public IActionResult Login()
         {
-            var json = HttpContext.Session.GetString(SessionConstant.CurrentUser);
+            var json =
+                HttpContext.Session
+                .GetString(
+                    SessionConstant.CurrentUser);
 
             if (!string.IsNullOrEmpty(json))
             {
-                var currentUser = JsonSerializer.Deserialize<UserSession>(json);
+                var currentUser =
+                    JsonSerializer
+                    .Deserialize<UserSession>(
+                        json);
 
-                if(currentUser != null)
+                if (currentUser != null)
                 {
-                    return Redirect(RouteConstant.Index);
+                    return Redirect(
+                        RouteConstant.Index);
                 }
             }
 
@@ -43,68 +53,47 @@ namespace ManagementKimThoa.Controllers
         [AllowAnonymous]
         [Route(RouteConstant.Login)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult>
+            Login(
+            [FromBody]
+            LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = "Chưa nhập đủ thông tin đăng nhập!"
-                });
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message =
+                        "Chưa nhập đủ thông tin đăng nhập!"
+                    });
             }
 
-            var account = await _context.Accounts
-                .FirstOrDefaultAsync(x =>
-                    x.Username == model.Username &&
-                    x.Password == model.Password);
+            var result =
+                await _authService
+                    .LoginAsync(model);
 
-            if (account == null)
+            if (result.Success &&
+                result.CurrentUser != null)
             {
-                return Ok(new
-                {
-                    success = false,
-                    message = "Sai tài khoản hoặc mật khẩu"
-                });
+                var json =
+                    JsonSerializer.Serialize(
+                        result.CurrentUser);
+
+                HttpContext.Session
+                    .SetString(
+                        SessionConstant.CurrentUser,
+                        json);
             }
-
-            var user = await _context.Users
-                .Include(x => x.Role)
-                .Include(x => x.Account)
-                .FirstOrDefaultAsync(x =>
-                    x.AccountId == account.Id);
-
-            if (user == null)
-            {
-                return Ok(new
-                {
-                    success = false,
-                    message = "Không tìm thấy người dùng"
-                });
-            }
-
-            var currentUser = new UserSession
-            {
-                UserId = user.Id,
-                UserCode = user.UserCode,
-                Username = account.Username,
-                RoleName = user.Role?.RoleName
-            };
-
-            var json = JsonSerializer.Serialize(currentUser);
-
-            HttpContext.Session.SetString(
-                SessionConstant.CurrentUser,
-                json);
 
             return Ok(new
             {
-                success = true,
-                message = "Đăng nhập thành công",
+                success =
+                    result.Success,
+                message =
+                    result.Message,
                 redirectUrl =
-                    currentUser.RoleName == RoleConstant.Admin
-                        ? RouteConstant.Dashboard
-                        : RouteConstant.Index
+                    result.RedirectUrl
             });
         }
 
@@ -114,9 +103,12 @@ namespace ManagementKimThoa.Controllers
         {
             HttpContext.Session.Clear();
 
-            TempData[ToastConstant.Success] = "Đăng xuất thành công";
+            TempData[
+                ToastConstant.Success]
+                = "Đăng xuất thành công";
 
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(
+                nameof(Login));
         }
     }
 }

@@ -35,6 +35,18 @@ namespace ManagementKimThoa.Configurations
             builder.Property(x => x.AvatarUrl)
                    .HasMaxLength(255);
 
+            builder.Property(x => x.Nation)
+                .HasMaxLength(255);
+
+            builder.Property(x => x.PlaceOfBirthRegistrationDetail)
+                .HasMaxLength(255);
+
+            builder.Property(x => x.PlaceOfBirthRegistrationProvince)
+                .HasMaxLength(255);
+
+            builder.Property(x => x.PlaceOfBirthRegistrationWard)
+                .HasMaxLength(255);
+
             builder.HasOne(x => x.Branch)
                    .WithMany(x => x.OtherInfors)
                    .HasForeignKey(x => x.BranchId)

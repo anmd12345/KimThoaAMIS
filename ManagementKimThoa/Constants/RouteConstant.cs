@@ -10,6 +10,10 @@ namespace ManagementKimThoa.Constants
 
         public const string Dashboard = "/admin/dashboard";
 
+        public const string Employees = "/admin/employees";
+        public const string EmployeeDetail = "/admin/employee-detail";
+        public const string CreateEmployee = "/admin/create-employee";
+
     }
 }
 
