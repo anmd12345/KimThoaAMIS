@@ -21,6 +21,7 @@ namespace ManagementKimThoa.Constants
         public const string Products = "/admin/product/products";
         public const string CreateProduct = "/admin/product/create-product";
 
+        public const string Attendances = "/admin/attendance/attendances";
 
     }
 }

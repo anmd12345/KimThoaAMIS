@@ -1,0 +1,128 @@
+﻿@model List<ManagementKimThoa.DTOs.Checkin.AttendanceListResponse>
+
+@{
+    ViewData["Title"] = "Danh sách chấm công";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card-header d-flex justify-content-between align-items-center"> <h4 class="mb-0"> Danh sách Checkin </h4> </div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th rowspan="2"> Nhân viên </th>
+                    <th rowspan="2"> Ca làm </th>
+                    <th rowspan="2"> Ngày </th>
+                    <th colspan="3"> Checkin </th>
+                    <th colspan="3"> Checkout </th>
+                    <th rowspan="2"> Giờ làm </th>
+                    <th rowspan="2"> Đi muộn </th>
+                    <th rowspan="2"> Trạng thái </th>
+                </tr>
+                <tr>
+                    <th>Giờ</th>
+                    <th>Ảnh</th>
+                    <th>Vị trí</th>
+                    <th>Giờ</th>
+                    <th>Ảnh</th>
+                    <th>Vị trí</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var checkinMap = $"https://www.google.com/maps?q={item.CheckInLatitude},{item.CheckInLongitude}"; var checkoutMap = $"https://www.google.com/maps?q={item.CheckOutLatitude},{item.CheckOutLongitude}";
+                    <tr>
+                        <!-- Nhân viên -->
+                        <td class="text-start">
+                            <div class="d-flex align-items-center">
+                                <img src="@(string.IsNullOrEmpty(item.AvatarUrl) ? "/assets/img/defaults/avatars/default-avatar.png" : item.AvatarUrl)" class="rounded-circle me-2 border" width="55" height="55" style="object-fit:cover" />
+                                <div>
+                                    <div class="fw-bold"> @item.FullName </div>
+                                    <small class="text-muted"> @item.UserCode </small>
+                                </div>
+                            </div>
+                        </td> <!-- Ca -->
+                        <td> @item.ShiftName </td> <!-- Ngày -->
+                        <td> @item.AttendanceDate.ToString("dd/MM/yyyy") </td> <!-- CHECKIN TIME -->
+                        <td> @(item.CheckInTime?.ToString("HH:mm") ?? "--") </td> <!-- CHECKIN IMAGE -->
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.CheckInImageUrl))
+                            {
+                                <a href="@($"/assets/uploads/checkins/{item.UserCode}/checkin/{item.CheckInImageUrl}")" target="_blank">
+                                    <img src="@($"/assets/uploads/checkins/{item.UserCode}/checkin/{item.CheckInImageUrl}")" width="70" height="70" class="rounded shadow-sm border" style="object-fit:cover" />
+                                </a>
+                            }
+                            else
+                            {
+
+                                <span class="text-muted"> -- </span>
+                            }
+                        </td> <!-- CHECKIN LOCATION -->
+                        <td class="text-start">
+                            @if (!string.IsNullOrEmpty(item.CheckInAddress))
+                            {
+                                <div class="small mb-1"> @item.CheckInAddress </div>
+                                <a href="@checkinMap" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa-solid fa-location-dot me-1"></i> Google Map
+                                </a>
+                            }
+                            else
+                            {
+
+                                <span class="text-muted"> -- </span>
+                            }
+                        </td> <!-- CHECKOUT TIME -->
+                        <td> @(item.CheckOutTime?.ToString("HH:mm") ?? "--") </td> <!-- CHECKOUT IMAGE -->
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.CheckOutImageUrl))
+                            {
+                                <a href="@($"/assets/uploads/checkins/{item.UserCode}/checkout/{item.CheckOutImageUrl}")" target="_blank"> <img src="@($"/assets/uploads/checkins/{item.UserCode}/checkout/{item.CheckOutImageUrl}")" width="70" height="70" class="rounded shadow-sm border" style="object-fit:cover" /> </a>
+                            }
+                            else
+                            {
+
+                                <span class="text-muted"> -- </span>
+                            }
+                        </td> <!-- CHECKOUT LOCATION -->
+                        <td class="text-start">
+                            @if (!string.IsNullOrEmpty(item.CheckOutAddress))
+                            {
+                                <div class="small mb-1"> @item.CheckOutAddress </div> <a href="@checkoutMap" target="_blank" class="btn btn-sm btn-outline-success"> <i class="fa-solid fa-location-dot me-1"></i> Google Map </a>
+                            }
+                            else
+                            {
+
+                                <span class="text-muted"> -- </span>
+                            }
+                        </td> <!-- WORK HOURS -->
+                        <td> <span class="fw-bold text-primary"> @item.WorkHours giờ </span> </td> <!-- LATE -->
+                        <td>
+                            @if (item.LateMinutes > 0)
+                            {
+                                <span class="badge bg-warning"> @item.LateMinutes phút </span>
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-success"> Đúng giờ </span>
+                            }
+                        </td> <!-- STATUS -->
+                        <td>
+                            @if (item.CheckOutTime != null)
+                            {
+                                <span class="badge bg-success"> Hoàn thành </span>
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-info"> Đang làm việc </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

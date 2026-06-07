@@ -40,6 +40,12 @@ namespace ManagementKimThoa.Contexts
 
         public DbSet<GiftProduct> GiftProducts { get; set; }
 
+        public DbSet<Shift> Shifts { get; set; }
+
+        public DbSet<Attendance> Attendances { get; set; }
+
+        public DbSet<WorkShiftAssignment> WorkShiftAssignments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

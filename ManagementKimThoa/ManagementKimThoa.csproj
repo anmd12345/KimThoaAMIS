@@ -1,20 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.10" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
+	</ItemGroup>
   <ItemGroup>
     <None Remove="Contexts\" />
     <None Remove="Areas\" />
@@ -61,29 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="Areas\" />
-    <Folder Include="Areas\Admin\" />
-    <Folder Include="Areas\Admin\Controllers\" />
-    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Views\Auth\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Services\" />
-    <Folder Include="Services\Interfaces\" />
-    <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="Views\Home\" />
-    <Folder Include="Models\" />
     <Folder Include="wwwroot\assets\img\" />
     <Folder Include="wwwroot\assets\img\defaults\" />
     <Folder Include="wwwroot\assets\img\defaults\avatars\" />
     <Folder Include="wwwroot\assets\img\defaults\icons\" />
-    <Folder Include="Configurations\" />
     <Folder Include="wwwroot\assets\img\bgs\" />
     <Folder Include="Constants\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Commons\" />
     <Folder Include="ViewModels\" />
     <Folder Include="ViewModels\Account\" />
     <Folder Include="DTOs\User\" />
@@ -92,7 +81,6 @@
     <Folder Include="ViewModels\Employee\" />
     <Folder Include="DTOs\Position\" />
     <Folder Include="DTOs\Branch\" />
-    <Folder Include="wwwroot\assets\uploads\" />
     <Folder Include="wwwroot\assets\uploads\avatars\" />
     <Folder Include="DTOs\Role\" />
     <Folder Include="Privates\" />
@@ -104,6 +92,9 @@
     <Folder Include="DTOs\IDCard\" />
     <Folder Include="DTOs\OtherInfor\" />
     <Folder Include="Areas\Admin\Views\User\" />
+    <Folder Include="wwwroot\assets\uploads\checkins\" />
+    <Folder Include="wwwroot\assets\uploads\checkins\NV001\checkin\" />
+    <Folder Include="wwwroot\assets\uploads\checkins\NV001\checkout\" />
     <Folder Include="wwwroot\assets\uploads\products\" />
     <Folder Include="DTOs\Product\" />
     <Folder Include="DTOs\Gift\" />

@@ -5,13 +5,9 @@
 
 @{
     var requestPath = Context.Request.Path;
-    var json =
-        Context.Session.GetString(SessionConstant.CurrentUser);
+    var json = Context.Session.GetString(SessionConstant.CurrentUser);
 
-    UserSession? currentUser =
-        string.IsNullOrEmpty(json)
-            ? null
-            : JsonSerializer.Deserialize<UserSession>(json);
+    UserSession? currentUser = string.IsNullOrEmpty(json) ? null : JsonSerializer.Deserialize<UserSession>(json);
 }
 
 
@@ -48,32 +44,106 @@
                     <!-- parent pages-->
 
                     <div class="nav-item-wrapper">
-                        <a class="nav-link dropdown-indicator label-1" href="#nv-CRM" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-CRM">
+                        <a class="nav-link dropdown-indicator label-1" href="#nv-employees" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-employees">
                             <div class="d-flex align-items-center">
-                                <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-icon"><span data-feather="users"></span></span><span class="nav-link-text">Nhân sự</span>
+                                <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-icon"><span data-feather="users"></span></span><span class="nav-link-text">Quản lý nhân sự</span>
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent @((requestPath == RouteConstant.Users || requestPath.StartsWithSegments(RouteConstant.ViewUser)  || requestPath == RouteConstant.CreateUser|| requestPath.StartsWithSegments(RouteConstant.ProfileScan) || requestPath.StartsWithSegments(RouteConstant.EditUser)) ? "show" : "")" data-bs-parent="#navbarVerticalCollapse" id="nv-CRM">
-                                <li class="collapsed-nav-item-title d-none">Nhân sự</li>
+                            <ul class="nav collapse parent  @((requestPath == RouteConstant.Users || requestPath.StartsWithSegments(RouteConstant.ViewUser)  || requestPath == RouteConstant.CreateUser|| requestPath.StartsWithSegments(RouteConstant.ProfileScan) || requestPath.StartsWithSegments(RouteConstant.EditUser) || requestPath.StartsWithSegments(RouteConstant.Attendances)) ? "show" : "")" data-bs-parent="#navbarVerticalCollapse" id="nv-employees">
+                                <li class="collapsed-nav-item-title d-none">Quản lý nhân sự</li>
                                 <li class="nav-item">
-                                    <a class="nav-link @((requestPath == RouteConstant.Users || requestPath.StartsWithSegments(RouteConstant.ViewUser) || requestPath.StartsWithSegments(RouteConstant.ProfileScan) || requestPath.StartsWithSegments(RouteConstant.EditUser)) ? "active" : "")" href="@RouteConstant.Users">
-                                        <div class="d-flex align-items-center"><span class="nav-link-text">Danh sách nhân sự</span></div>
+                                    <a class="nav-link dropdown-indicator" href="#nv-users" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-users">
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-text">Nhân sự</span>
+                                        </div>
                                     </a><!-- more inner pages-->
+                                    <div class="parent-wrapper">
+                                        <ul class="nav collapse parent @((requestPath == RouteConstant.Users || requestPath.StartsWithSegments(RouteConstant.ViewUser)  || requestPath == RouteConstant.CreateUser|| requestPath.StartsWithSegments(RouteConstant.ProfileScan) || requestPath.StartsWithSegments(RouteConstant.EditUser)) ? "show" : "")" data-bs-parent="#nv-employees" id="nv-users">
+                                            <li class="nav-item">
+                                                <a class="nav-link @((requestPath == RouteConstant.Users || requestPath.StartsWithSegments(RouteConstant.ViewUser) || requestPath.StartsWithSegments(RouteConstant.ProfileScan) || requestPath.StartsWithSegments(RouteConstant.EditUser)) ? "active" : "")" href="@RouteConstant.Users">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Danh sách nhân sự</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link @(requestPath == RouteConstant.CreateUser ? "active" : "")" href="@RouteConstant.CreateUser">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Thêm nhân sự</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link @(requestPath == RouteConstant.CreateUser ? "active" : "")" href="@RouteConstant.CreateUser">
-                                        <div class="d-flex align-items-center"><span class="nav-link-text">Thêm nhân sự</span></div>
+                                    <a class="nav-link dropdown-indicator" href="#nv-attendance" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-attendance">
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-text">Quản lý chấm công</span>
+                                        </div>
                                     </a><!-- more inner pages-->
+                                    <div class="parent-wrapper">
+                                        <ul class="nav collapse parent @(requestPath == RouteConstant.Attendances ? "show" : "" )" data-bs-parent="#nv-employees" id="nv-attendance">
+                                            <li class="nav-item">
+                                                <a class="nav-link @(requestPath == RouteConstant.Attendances ? "active" : "" )" href="@RouteConstant.Attendances">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Xem chấm công</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+
+                                        </ul>
+                                    </div>
                                 </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-indicator" href="#nv-shift" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-shift">
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-text">Quản lý ca làm việc</span>
+                                        </div>
+                                    </a><!-- more inner pages-->
+                                    <div class="parent-wrapper">
+                                        <ul class="nav collapse parent" data-bs-parent="#nv-employees" id="nv-shift">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@RouteConstant.Products">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Danh sách ca làm việc</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@RouteConstant.CreateProduct">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Thêm ca làm việc</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-indicator" href="#nv-branch" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-branch">
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-text">Quản lý chi nhánh</span>
+                                        </div>
+                                    </a><!-- more inner pages-->
+                                    <div class="parent-wrapper">
+                                        <ul class="nav collapse parent" data-bs-parent="#nv-employees" id="nv-branch">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@RouteConstant.CreateProduct">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Danh sách chi nhánh </span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@RouteConstant.CreateProduct">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Thêm chi nhánh </span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@RouteConstant.Products">
+                                                    <div class="d-flex align-items-center"><span class="nav-link-text">Cài đặt vị trí chi nhánh</span></div>
+                                                </a><!-- more inner pages-->
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
 
-
                     
-
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-e-commerce" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-e-commerce">
                             <div class="d-flex align-items-center">
@@ -300,109 +370,110 @@
     </div>
 </nav>
 
-<script>var navbarTopShape = window.config.config.phoenixNavbarTopShape;
-    var navbarPosition = window.config.config.phoenixNavbarPosition;
-    var body = document.querySelector('body');
-    var navbarDefault = document.querySelector('#navbarDefault');
-    var navbarTop = document.querySelector('#navbarTop');
-    var topNavSlim = document.querySelector('#topNavSlim');
-    var navbarTopSlim = document.querySelector('#navbarTopSlim');
-    var navbarCombo = document.querySelector('#navbarCombo');
-    var navbarComboSlim = document.querySelector('#navbarComboSlim');
-    var dualNav = document.querySelector('#dualNav');
+<script>
+    var navbarTopShape = window.config.config.phoenixNavbarTopShape;
+        var navbarPosition = window.config.config.phoenixNavbarPosition;
+        var body = document.querySelector('body');
+        var navbarDefault = document.querySelector('#navbarDefault');
+        var navbarTop = document.querySelector('#navbarTop');
+        var topNavSlim = document.querySelector('#topNavSlim');
+        var navbarTopSlim = document.querySelector('#navbarTopSlim');
+        var navbarCombo = document.querySelector('#navbarCombo');
+        var navbarComboSlim = document.querySelector('#navbarComboSlim');
+        var dualNav = document.querySelector('#dualNav');
 
-    var documentElement = document.documentElement;
-    var navbarVertical = document.querySelector('.navbar-vertical');
+        var documentElement = document.documentElement;
+        var navbarVertical = document.querySelector('.navbar-vertical');
 
-    if (navbarPosition === 'dual-nav') {
-        topNavSlim?.remove();
-        navbarTop?.remove();
-        navbarTopSlim?.remove();
-        navbarCombo?.remove();
-        navbarComboSlim?.remove();
-        navbarDefault?.remove();
-        navbarVertical?.remove();
-        dualNav.removeAttribute('style');
-        document.documentElement.setAttribute('data-navigation-type', 'dual');
+        if (navbarPosition === 'dual-nav') {
+            topNavSlim?.remove();
+            navbarTop?.remove();
+            navbarTopSlim?.remove();
+            navbarCombo?.remove();
+            navbarComboSlim?.remove();
+            navbarDefault?.remove();
+            navbarVertical?.remove();
+            dualNav.removeAttribute('style');
+            document.documentElement.setAttribute('data-navigation-type', 'dual');
 
-    } else if (navbarTopShape === 'slim' && navbarPosition === 'vertical') {
-        navbarDefault?.remove();
-        navbarTop?.remove();
-        navbarTopSlim?.remove();
-        navbarCombo?.remove();
-        navbarComboSlim?.remove();
-        topNavSlim.style.display = 'block';
-        navbarVertical.style.display = 'inline-block';
-        document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+        } else if (navbarTopShape === 'slim' && navbarPosition === 'vertical') {
+            navbarDefault?.remove();
+            navbarTop?.remove();
+            navbarTopSlim?.remove();
+            navbarCombo?.remove();
+            navbarComboSlim?.remove();
+            topNavSlim.style.display = 'block';
+            navbarVertical.style.display = 'inline-block';
+            document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
 
-    } else if (navbarTopShape === 'slim' && navbarPosition === 'horizontal') {
-        navbarDefault?.remove();
-        navbarVertical?.remove();
-        navbarTop?.remove();
-        topNavSlim?.remove();
-        navbarCombo?.remove();
-        navbarComboSlim?.remove();
-        dualNav?.remove();
-        navbarTopSlim.removeAttribute('style');
-        document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
-    } else if (navbarTopShape === 'slim' && navbarPosition === 'combo') {
-        navbarDefault?.remove();
-        navbarTop?.remove();
-        topNavSlim?.remove();
-        navbarCombo?.remove();
-        navbarTopSlim?.remove();
-        dualNav?.remove();
-        navbarComboSlim.removeAttribute('style');
-        navbarVertical.removeAttribute('style');
-        document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
-    } else if (navbarTopShape === 'default' && navbarPosition === 'horizontal') {
-        navbarDefault?.remove();
-        topNavSlim?.remove();
-        navbarVertical?.remove();
-        navbarTopSlim?.remove();
-        navbarCombo?.remove();
-        navbarComboSlim?.remove();
-        dualNav?.remove();
-        navbarTop.removeAttribute('style');
-        document.documentElement.setAttribute('data-navigation-type', 'horizontal');
-    } else if (navbarTopShape === 'default' && navbarPosition === 'combo') {
-        topNavSlim?.remove();
-        navbarTop?.remove();
-        navbarTopSlim?.remove();
-        navbarDefault?.remove();
-        navbarComboSlim?.remove();
-        dualNav?.remove();
-        navbarCombo.removeAttribute('style');
-        navbarVertical.removeAttribute('style');
-        document.documentElement.setAttribute('data-navigation-type', 'combo');
-    } else {
-        topNavSlim?.remove();
-        navbarTop?.remove();
-        navbarTopSlim?.remove();
-        navbarCombo?.remove();
-        navbarComboSlim?.remove();
-        dualNav?.remove();
-        navbarDefault.removeAttribute('style');
-        navbarVertical.removeAttribute('style');
-    }
+        } else if (navbarTopShape === 'slim' && navbarPosition === 'horizontal') {
+            navbarDefault?.remove();
+            navbarVertical?.remove();
+            navbarTop?.remove();
+            topNavSlim?.remove();
+            navbarCombo?.remove();
+            navbarComboSlim?.remove();
+            dualNav?.remove();
+            navbarTopSlim.removeAttribute('style');
+            document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+        } else if (navbarTopShape === 'slim' && navbarPosition === 'combo') {
+            navbarDefault?.remove();
+            navbarTop?.remove();
+            topNavSlim?.remove();
+            navbarCombo?.remove();
+            navbarTopSlim?.remove();
+            dualNav?.remove();
+            navbarComboSlim.removeAttribute('style');
+            navbarVertical.removeAttribute('style');
+            document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+        } else if (navbarTopShape === 'default' && navbarPosition === 'horizontal') {
+            navbarDefault?.remove();
+            topNavSlim?.remove();
+            navbarVertical?.remove();
+            navbarTopSlim?.remove();
+            navbarCombo?.remove();
+            navbarComboSlim?.remove();
+            dualNav?.remove();
+            navbarTop.removeAttribute('style');
+            document.documentElement.setAttribute('data-navigation-type', 'horizontal');
+        } else if (navbarTopShape === 'default' && navbarPosition === 'combo') {
+            topNavSlim?.remove();
+            navbarTop?.remove();
+            navbarTopSlim?.remove();
+            navbarDefault?.remove();
+            navbarComboSlim?.remove();
+            dualNav?.remove();
+            navbarCombo.removeAttribute('style');
+            navbarVertical.removeAttribute('style');
+            document.documentElement.setAttribute('data-navigation-type', 'combo');
+        } else {
+            topNavSlim?.remove();
+            navbarTop?.remove();
+            navbarTopSlim?.remove();
+            navbarCombo?.remove();
+            navbarComboSlim?.remove();
+            dualNav?.remove();
+            navbarDefault.removeAttribute('style');
+            navbarVertical.removeAttribute('style');
+        }
 
-    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-    var navbarTop = document.querySelector('.navbar-top');
-    if (navbarTopStyle === 'darker') {
-        navbarTop.setAttribute('data-navbar-appearance', 'darker');
-    }
+        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+        var navbarTop = document.querySelector('.navbar-top');
+        if (navbarTopStyle === 'darker') {
+            navbarTop.setAttribute('data-navbar-appearance', 'darker');
+        }
 
-    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-    var navbarVertical = document.querySelector('.navbar-vertical');
-    if (navbarVerticalStyle === 'darker') {
-        navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+        var navbarVertical = document.querySelector('.navbar-vertical');
+        if (navbarVerticalStyle === 'darker') {
+            navbarVertical.setAttribute('data-navbar-appearance', 'darker');
     }</script>
 
-<script>
-    function logout() {
+    <script>
+        function logout() {
 
-        sessionStorage.removeItem("remember_login");
+            sessionStorage.removeItem("remember_login");
 
-        window.location.href = "@RouteConstant.Logout";
-    }
-</script>
+            window.location.href = "@RouteConstant.Logout";
+        }
+    </script>

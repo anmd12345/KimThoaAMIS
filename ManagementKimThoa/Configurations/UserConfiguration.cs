@@ -51,6 +51,16 @@ namespace ManagementKimThoa.Configurations
                    .WithMany(x => x.Users)
                    .HasForeignKey(x => x.RoleId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.Attendances)
+             .WithOne(x => x.User)
+             .HasForeignKey(x => x.UserId)
+             .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.WorkShiftAssignments)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }   
     }
 }

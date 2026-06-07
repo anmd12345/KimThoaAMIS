@@ -25,6 +25,7 @@ namespace ManagementKimThoa.Repositories
             return await _context.Users
                 .Include(x => x.Role)
                 .Include(x => x.Account)
+                .Include(x=>x.IDCard)
                 .Include(x=>x.OtherInfor)
                 .FirstOrDefaultAsync(x => x.AccountId == accountId);
         }

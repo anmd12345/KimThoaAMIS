@@ -58,6 +58,58 @@ namespace ManagementKimThoa.Services
 
             return "";
         }
+        public async Task<string> UploadFileAsync(IFormFile file, string typeUpload, string userCode)
+        {
+            if (file != null)
+            {
+                string folder = "";
+
+                if (typeUpload == TypeUploadFileConstant.Avatar)
+                {
+                    folder = Path.Combine(
+                    _env.WebRootPath,
+                    "assets",
+                    "uploads",
+                    "avatars");
+                }
+                else if (typeUpload == TypeUploadFileConstant.FileScan)
+                {
+                    folder = Path.Combine(_env.ContentRootPath, "Privates", "Profiles");
+                }else if(typeUpload == TypeUploadFileConstant.Product)
+                {
+                    folder = Path.Combine(_env.WebRootPath, "assets", "uploads", "products");
+                }
+                else if(typeUpload == TypeUploadFileConstant.Gift)
+                {
+                    folder = Path.Combine(_env.WebRootPath, "assets", "uploads", "gifts");
+                }
+                else if (typeUpload == TypeUploadFileConstant.Checkin)
+                {
+                    folder = Path.Combine(_env.WebRootPath, "assets", "uploads", "checkins", userCode, "checkin");
+                }
+                else if (typeUpload == TypeUploadFileConstant.Checkout)
+                {
+                    folder = Path.Combine(_env.WebRootPath, "assets", "uploads", "checkins", userCode, "checkout");
+                }
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+
+                string filePath = Path.Combine(folder, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+
+                await file.CopyToAsync(stream);
+
+                return fileName;
+            }
+
+            return "";
+        }
     }
 }
 

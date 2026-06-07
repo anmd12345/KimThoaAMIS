@@ -11,6 +11,8 @@ namespace ManagementKimThoa.DTOs.User
 
         public string? RoleName { get; set; }
 
+        public string? FullName { get; set; }
+
         public string? AvatarUrl { get; set; }
     }
 }

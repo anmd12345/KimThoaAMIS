@@ -1,5 +1,4 @@
-﻿using System;
-using ManagementKimThoa.Constants;
+﻿using ManagementKimThoa.Constants;
 using ManagementKimThoa.DTOs.Auth;
 using ManagementKimThoa.DTOs.User;
 using ManagementKimThoa.Repositories.Interfaces;
@@ -12,32 +11,25 @@ namespace ManagementKimThoa.Services
     {
         private readonly IAuthRepository _authRepository;
 
-        public AuthService(
-            IAuthRepository authRepository)
+        public AuthService(IAuthRepository authRepository)
         {
             _authRepository = authRepository;
         }
 
-        public async Task<LoginResultDto> LoginAsync(
-            LoginViewModel model)
+        public async Task<LoginResultDto> LoginAsync(LoginViewModel model)
         {
-            var account = await _authRepository
-                    .GetAccountAsync(
-                        model.Username,
-                        model.Password);
+            var account = await _authRepository.GetAccountAsync(model.Username, model.Password);
 
             if (account == null)
             {
                 return new LoginResultDto
                 {
                     Success = false,
-                    Message =
-                        "Sai tài khoản hoặc mật khẩu"
+                    Message = "Sai tài khoản hoặc mật khẩu"
                 };
             }
 
-            var user = await _authRepository
-                    .GetUserByAccountIdAsync(account.Id);
+            var user = await _authRepository.GetUserByAccountIdAsync(account.Id);
 
             if (user == null)
             {
@@ -54,21 +46,16 @@ namespace ManagementKimThoa.Services
                 UserCode = user.UserCode,
                 Username = account.Username,
                 RoleName = user.Role?.RoleName,
-                AvatarUrl = user.OtherInfor?.AvatarUrl
+                AvatarUrl = user.OtherInfor?.AvatarUrl,
+                FullName = user.IDCard == null ? account.Username : user.IDCard.FullName
             };
 
             return new LoginResultDto
             {
                 Success = true,
-                Message =
-                    "Đăng nhập thành công",
-                CurrentUser =
-                    currentUser,
-                RedirectUrl =
-                    currentUser.RoleName
-                        == RoleConstant.Admin
-                    ? RouteConstant.Dashboard
-                    : RouteConstant.Index
+                Message = "Đăng nhập thành công",
+                CurrentUser = currentUser,
+                RedirectUrl = currentUser.RoleName == RoleConstant.Admin ? RouteConstant.Dashboard : RouteConstant.Index
             };
         }
     }
