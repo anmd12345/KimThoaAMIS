@@ -1,32 +1,30 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using ManagementKimThoa.Constants;
+using ManagementKimThoa.DTOs.User;
 using ManagementKimThoa.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ManagementKimThoa.Controllers;
 
+
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
+    [Route(RouteConstant.Index)]
+    [AllowAnonymous]
     public IActionResult Index()
     {
+        var userJson = HttpContext.Session.GetString(SessionConstant.CurrentUser);
+
+        if (!string.IsNullOrEmpty(userJson))
+        {
+            var currentUser = JsonSerializer.Deserialize<UserSession>(userJson);
+            ViewBag.currentUser = currentUser;
+        }
+
         return View();
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
 }
 

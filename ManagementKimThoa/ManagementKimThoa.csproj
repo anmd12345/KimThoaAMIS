@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -9,10 +9,11 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.20" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.20" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.10" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Contexts\" />
@@ -23,14 +24,40 @@
     <None Remove="Areas\Admin\Models\" />
     <None Remove="Areas\Admin\Views\Shared\" />
     <None Remove="Views\Auth\" />
-    <None Remove="PrivateResources\" />
-    <None Remove="PrivateResources\ScanFiles\" />
     <None Remove="DTOs\" />
     <None Remove="Services\" />
     <None Remove="Services\Interfaces\" />
-    <None Remove="Repos\" />
     <None Remove="Repos\Interfaces\" />
     <None Remove="Areas\Admin\Views\Dashboard\" />
+    <None Remove="Views\Home\" />
+    <None Remove="Models\" />
+    <None Remove="Configurations\" />
+    <None Remove="Constants\" />
+    <None Remove="Repositories\" />
+    <None Remove="Commons\" />
+    <None Remove="ViewModels\" />
+    <None Remove="ViewModels\Account\" />
+    <None Remove="DTOs\User\" />
+    <None Remove="Attributes\" />
+    <None Remove="DTOs\Auth\" />
+    <None Remove="ViewModels\Employee\" />
+    <None Remove="DTOs\Position\" />
+    <None Remove="DTOs\Branch\" />
+    <None Remove="DTOs\Role\" />
+    <None Remove="Privates\" />
+    <None Remove="Privates\Profiles\" />
+    <None Remove="Privates\Profiles\8b6a8ca2-36d0-437d-a2eb-eb398f5b886c.pdf" />
+    <None Remove="DTOs\Account\" />
+    <None Remove="DTOs\Note\" />
+    <None Remove="DTOs\BankInfo\" />
+    <None Remove="DTOs\HealthInsurance\" />
+    <None Remove="DTOs\IDCard\" />
+    <None Remove="DTOs\OtherInfor\" />
+    <None Remove="Areas\Admin\Views\User\" />
+    <None Remove="DTOs\Product\" />
+    <None Remove="DTOs\Gift\" />
+    <None Remove="DTOs\Promotion\" />
+    <None Remove="Areas\Admin\Views\Product\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
@@ -41,13 +68,62 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Views\Auth\" />
-    <Folder Include="PrivateResources\" />
-    <Folder Include="PrivateResources\ScanFiles\" />
     <Folder Include="DTOs\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
-    <Folder Include="Repos\" />
-    <Folder Include="Repos\Interfaces\" />
+    <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Models\" />
+    <Folder Include="wwwroot\assets\img\" />
+    <Folder Include="wwwroot\assets\img\defaults\" />
+    <Folder Include="wwwroot\assets\img\defaults\avatars\" />
+    <Folder Include="wwwroot\assets\img\defaults\icons\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="wwwroot\assets\img\bgs\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Commons\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="ViewModels\Account\" />
+    <Folder Include="DTOs\User\" />
+    <Folder Include="Attributes\" />
+    <Folder Include="DTOs\Auth\" />
+    <Folder Include="ViewModels\Employee\" />
+    <Folder Include="DTOs\Position\" />
+    <Folder Include="DTOs\Branch\" />
+    <Folder Include="wwwroot\assets\uploads\" />
+    <Folder Include="wwwroot\assets\uploads\avatars\" />
+    <Folder Include="DTOs\Role\" />
+    <Folder Include="Privates\" />
+    <Folder Include="Privates\Profiles\" />
+    <Folder Include="DTOs\Account\" />
+    <Folder Include="DTOs\Note\" />
+    <Folder Include="DTOs\BankInfo\" />
+    <Folder Include="DTOs\HealthInsurance\" />
+    <Folder Include="DTOs\IDCard\" />
+    <Folder Include="DTOs\OtherInfor\" />
+    <Folder Include="Areas\Admin\Views\User\" />
+    <Folder Include="wwwroot\assets\uploads\products\" />
+    <Folder Include="DTOs\Product\" />
+    <Folder Include="DTOs\Gift\" />
+    <Folder Include="DTOs\Promotion\" />
+    <Folder Include="Areas\Admin\Views\Product\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\assets\img\" />
+    <Content Remove="wwwroot\assets\img\defaults\" />
+    <Content Remove="wwwroot\assets\img\defaults\avatars\" />
+    <Content Remove="wwwroot\assets\img\defaults\icons\" />
+    <Content Remove="wwwroot\assets\img\bgs\" />
+    <Content Remove="wwwroot\assets\uploads\" />
+    <Content Remove="wwwroot\assets\uploads\avatars\" />
+    <Content Remove="wwwroot\assets\uploads\products\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Privates\Profiles\8b6a8ca2-36d0-437d-a2eb-eb398f5b886c.pdf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>
