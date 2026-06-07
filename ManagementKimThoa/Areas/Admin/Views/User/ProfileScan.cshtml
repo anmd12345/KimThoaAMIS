@@ -1,0 +1,40 @@
+﻿@using ManagementKimThoa.DTOs.User
+@using ManagementKimThoa.Constants
+@model UserDto
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Xem File Scan";
+    string extension = ViewBag.FileExtension;
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="@RouteConstant.Dashboard">Bảng điều khiển</a></li>
+        <li class="breadcrumb-item active">Nhân sự</li>
+        <li class="breadcrumb-item"><a href="@RouteConstant.Users">Danh sách nhân sự</a></li>
+        <li class="breadcrumb-item"><a href="@RouteConstant.ViewUser/@Model.Id">Chi tiết @Model.UserCode</a></li>
+        <li class="breadcrumb-item active">Hồ sơ scan</li>
+    </ol>
+</nav>
+
+@if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+{
+    <img src="@RouteConstant.ProfileFile/@Model.Id" class="img-fluid rounded shadow" />
+}
+
+@if (extension == ".pdf")
+{
+    <iframe src="@RouteConstant.ProfileFile/@Model.Id" width="100%" height="900"> </iframe>
+}
+
+@if (extension == ".doc" || extension == ".docx")
+{
+    <div class="text-center py-5">
+        <i class="fas fa-file-word fa-6x text-primary"></i>
+        <h4 class="mt-3"> @Model?.OtherInfor?.ProfileScanUrl </h4>
+        <a href="@RouteConstant.ProfileFile/@Model.Id" class="btn btn-primary mt-3">
+            Tải xuống
+        </a>
+    </div>
+}

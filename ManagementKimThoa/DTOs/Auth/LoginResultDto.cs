@@ -1,5 +1,4 @@
-﻿using System;
-using ManagementKimThoa.DTOs.User;
+﻿using ManagementKimThoa.DTOs.User;
 
 namespace ManagementKimThoa.DTOs.Auth
 {

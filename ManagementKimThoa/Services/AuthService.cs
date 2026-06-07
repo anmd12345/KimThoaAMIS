@@ -8,7 +8,7 @@ using ManagementKimThoa.ViewModels.Account;
 
 namespace ManagementKimThoa.Services
 {
-	public class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepository;
 
@@ -21,8 +21,7 @@ namespace ManagementKimThoa.Services
         public async Task<LoginResultDto> LoginAsync(
             LoginViewModel model)
         {
-            var account =
-                await _authRepository
+            var account = await _authRepository
                     .GetAccountAsync(
                         model.Username,
                         model.Password);
@@ -37,30 +36,26 @@ namespace ManagementKimThoa.Services
                 };
             }
 
-            var user =
-                await _authRepository
-                    .GetUserByAccountIdAsync(
-                        account.Id);
+            var user = await _authRepository
+                    .GetUserByAccountIdAsync(account.Id);
 
             if (user == null)
             {
                 return new LoginResultDto
                 {
                     Success = false,
-                    Message =
-                        "Không tìm thấy người dùng"
+                    Message = "Không tìm thấy người dùng"
                 };
             }
 
-            var currentUser =
-                new UserSession
-                {
-                    UserId = user.Id,
-                    UserCode = user.UserCode,
-                    Username = account.Username,
-                    RoleName =
-                        user.Role?.RoleName
-                };
+            var currentUser = new UserSession
+            {
+                UserId = user.Id,
+                UserCode = user.UserCode,
+                Username = account.Username,
+                RoleName = user.Role?.RoleName,
+                AvatarUrl = user.OtherInfor?.AvatarUrl
+            };
 
             return new LoginResultDto
             {

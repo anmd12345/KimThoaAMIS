@@ -1,7 +1,175 @@
-﻿@using ManagementKimThoa.DTOs.User
-@{
-    UserSession currentUser = ViewBag.currentUser;
+﻿@{
+    ViewData["Title"] = "Tra cứu CTKM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Đây là trang chủ nha: @currentUser.Username</h1>
+@section Styles{
+    <style>
+        /* Hiệu ứng hover nhẹ nhàng cho các Card khuyến mãi */
+        .promo-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
 
+            .promo-card:hover {
+                transform: translateY(-3px);
+                box-shadow: var(--phoenix-box-shadow-lg) !important;
+            }
+
+        .ticket-left {
+            border-right: 2px dashed var(--phoenix-border-color);
+        }
+        /* Chuyển viền cắt đứt xuống dưới cho màn hình điện thoại */
+        @@media (max-width: 767.98px) {
+            .ticket-left {
+                border-right: none;
+                border-bottom: 2px dashed var(--phoenix-border-color);
+            }
+        }
+
+        /* Custom thanh cuộn cho danh sách quà tặng dài */
+        .gift-scroll-container {
+            max-height: 260px; /* Chiều cao tối đa, vượt quá sẽ hiện thanh cuộn */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+            /* Làm đẹp thanh cuộn trên Chrome/Edge/Safari */
+            .gift-scroll-container::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .gift-scroll-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .gift-scroll-container::-webkit-scrollbar-thumb {
+                background-color: var(--phoenix-border-color);
+                border-radius: 10px;
+            }
+
+            .gift-scroll-container:hover::-webkit-scrollbar-thumb {
+                background-color: var(--phoenix-tertiary-color);
+            }
+    </style>
+}
+
+<div class="container-medium">
+    <div class="d-flex align-items-center mb-4">
+        <i class="fa-solid fa-list-check fs-4 me-2 text-primary"></i>
+        <h4 class="mb-0 text-body-emphasis fw-bold">Các chương trình khuyến mãi áp dụng (4)</h4>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card promo-card shadow-sm border-0 bg-body-highlight overflow-hidden">
+                <div class="row g-0">
+
+                    <div class="col-md-4 col-xl-3 bg-body-tertiary d-flex flex-column justify-content-center align-items-center p-3 border-end position-relative ticket-left" style="min-height: 200px;">
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-white rounded-3 shadow-sm p-2 overflow-hidden position-relative border">
+
+                            <span class="position-absolute top-0 start-0 m-2 badge bg-primary fs-10 shadow-sm z-1">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i>Sản phẩm mua
+                            </span>
+
+                            <img src="/assets/uploads/products/1.png"
+                                 alt="Sản phẩm tìm kiếm"
+                                 class="w-100 h-100 cursor-pointer zoom-gift"
+                                 style="object-fit: contain;"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#giftImageModal"
+                                 data-image="/assets/uploads/products/1.png">
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 col-xl-9 p-4 d-flex flex-column justify-content-between">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="fw-bold mb-0 text-body-emphasis">Kho Quà Khổng Lồ - Tặng Kèm Sữa Bột</h5>
+                            <div>
+                                <span class="badge badge-phoenix badge-phoenix-warning"><i class="fa-regular fa-clock me-1"></i>Hết hạn: 30/06</span>
+                                <span class="badge badge-phoenix badge-phoenix-danger"><i class="fa-regular fa-hospital me-1"></i>Áp dụng: Toàn chi nhánh</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-body-secondary rounded-2 border-start border-4 border-success mb-3">
+                            <p class="mb-0 fs-9 text-body-secondary">
+                                <strong class="text-body-emphasis"><i class="fa-solid fa-circle-info me-1"></i>Hướng dẫn:</strong>
+                                Hệ thống tự động phân loại quà theo từng mốc điều kiện mua bên dưới. Vui lòng kiểm tra số lượng hàng trên giỏ để chọn quà chính xác.
+                            </p>
+                        </div>
+
+                        <div class="border rounded-2 mb-3 bg-body-highlight overflow-hidden">
+                            <div class="d-flex align-items-center bg-body-secondary p-2 border-bottom fs-10 fw-bolder text-uppercase text-body-tertiary sticky-top" style="z-index: 3;">
+                                <div class="col-12 ps-2">Danh sách quà tặng theo điều kiện</div>
+                            </div>
+
+                            <div class="gift-scroll-container position-relative" style="max-height: 280px; overflow-y: auto;">
+
+                                <div class="bg-light-primary p-2 border-bottom d-flex align-items-center sticky-top shadow-sm" style="top: 0; z-index: 2; background-color: var(--phoenix-primary-bg-subtle);">
+                                    <span class="badge bg-danger me-2 fs-10">MUA 1 SẢN PHẨM</span>
+                                </div>
+
+                               
+                                <div class="d-flex align-items-center p-2 border-bottom transition-base cursor-pointer">
+                                    <div class="col-12 d-flex align-items-center gap-2">
+                                        <div class="border rounded bg-white d-flex align-items-center justify-content-center flex-shrink-0 cursor-pointer zoom-gift"
+                                             style="width: 40px; height: 40px;"
+                                             data-bs-toggle="modal"
+                                             data-bs-target="#giftImageModal"
+                                             data-image="https://cdn-icons-png.flaticon.com/512/2640/2640742.png">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/2640/2640742.png" class="w-100 h-100 p-1" style="object-fit: cover;">
+                                        </div>
+                                        <h6 class="mb-0 fw-bold text-body-emphasis text-truncate" title="Khăn Ướt Thần Kỳ Cho Bé">Khăn Ướt Thần Kỳ Cho Bé</h6>
+                                    </div>
+                                </div>
+
+
+                                <div class="bg-light-danger p-2 border-bottom d-flex align-items-center sticky-top shadow-sm" style="top: 0; z-index: 2; background-color: var(--phoenix-danger-bg-subtle);">
+                                    <span class="badge bg-danger me-2 fs-10">MUA 2 SẢN PHẨM</span>
+                                </div>
+
+                                <div class="d-flex align-items-center p-2 border-bottom transition-base cursor-pointer">
+                                    <div class="col-12 d-flex align-items-center gap-2">
+                                        <div class="border rounded bg-white d-flex align-items-center justify-content-center flex-shrink-0 cursor-pointer zoom-gift"
+                                             style="width: 40px; height: 40px;"
+                                             data-bs-toggle="modal"
+                                             data-bs-target="#giftImageModal"
+                                             data-image="https://cdn-icons-png.flaticon.com/512/2640/2640742.png">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/2640/2640742.png" class="w-100 h-100 p-1" style="object-fit: cover;">
+                                        </div>
+                                        <h6 class="mb-0 fw-bold text-body-emphasis text-truncate" title="Khăn Ướt Thần Kỳ Cho Bé">Khăn Ướt Thần Kỳ Cho Bé</h6>
+                                    </div>
+                                   
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="giftImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-body p-0">
+                <img src="" id="zoomedGiftImg" class="img-fluid rounded" alt="Quà tặng">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>document.querySelectorAll('.zoom-gift').forEach(item => {
+            item.addEventListener('click', event => {
+                // Lấy đường dẫn ảnh từ thuộc tính data-image
+                const imgSrc = item.getAttribute('data-image');
+                // Gán vào thẻ img trong Modal
+                document.getElementById('zoomedGiftImg').src = imgSrc;
+            });
+        });</script>
+}

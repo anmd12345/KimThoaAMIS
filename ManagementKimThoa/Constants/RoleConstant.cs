@@ -7,7 +7,7 @@ namespace ManagementKimThoa.Constants
 		public const string Manage = "Manage";
         public const string Warehouse = "Warehouse";
         public const string Accountant = "Accountant";
-        public const string SalesAgent = "Sales Agent";
+        public const string SalesAgent = "SalesAgent";
 
     }
 }

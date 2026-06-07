@@ -2,8 +2,9 @@
 {
 	public class PositionDto
 	{
-		public short? Id { get; set; }
-		public string? PositionName { get; set; }
-	}
+        public short? Id { get; set; }
+
+        public string? PositionName { get; set; }
+    }
 }
 

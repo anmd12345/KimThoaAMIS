@@ -16,8 +16,8 @@ namespace ManagementKimThoa.Configurations
             builder.Property(x => x.NoteTitle)
                    .HasMaxLength(500);
 
-            builder.Property(x => x.NoteDescription)
-                   .HasMaxLength(2000);
+            builder.Property(x => x.NoteDescription);
+                   
 
             builder.Property(x => x.DateCreateNote)
                    .HasMaxLength(100)

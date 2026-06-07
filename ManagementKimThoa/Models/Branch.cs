@@ -1,5 +1,4 @@
-﻿using System;
-namespace ManagementKimThoa.Models
+﻿namespace ManagementKimThoa.Models
 {
     public class Branch
     {

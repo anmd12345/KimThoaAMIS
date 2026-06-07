@@ -11,6 +11,7 @@ namespace ManagementKimThoa.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+           
             var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
 
             if (allowAnonymous)
@@ -19,7 +20,12 @@ namespace ManagementKimThoa.Attributes
                 return;
             }
 
+            var session = context.HttpContext.Session;
+            var sessionId = session.Id;
             var json = context.HttpContext.Session.GetString(SessionConstant.CurrentUser);
+
+            Console.WriteLine($"SessionId: {sessionId}");
+            Console.WriteLine($"CurrentUser: {(json != null ? "EXISTS" : "NULL")}");
 
             if (string.IsNullOrEmpty(json))
             {

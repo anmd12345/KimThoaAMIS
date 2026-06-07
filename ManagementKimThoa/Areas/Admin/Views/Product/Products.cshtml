@@ -1,0 +1,230 @@
+﻿@model List<ManagementKimThoa.DTOs.Product.ProductDto>
+@using ManagementKimThoa.Constants
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="content">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold">
+                    Danh sách sản phẩm
+                </h4>
+
+                <a href="@RouteConstant.CreateProduct" class="btn btn-primary">
+
+                    <i class="fa-solid fa-plus me-1">
+                    </i>
+
+                    Thêm sản phẩm
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <!-- Search -->
+            <form method="get"
+                  action="@RouteConstant.Products">
+
+                <div class="row mb-4">
+
+                    <div class="col-md-4">
+
+                        <input type="text"
+                               name="keyword"
+                               class="form-control"
+                               placeholder="Tìm mã hoặc tên sản phẩm..."
+                               value="@ViewBag.Keyword" />
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            <i class="fa-solid fa-search">
+                            </i>
+
+                            Tìm kiếm
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <!-- Table -->
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th width="80">
+                                Ảnh
+                            </th>
+
+                            <th>
+                                Mã SP
+                            </th>
+
+                            <th>
+                                Tên sản phẩm
+                            </th>
+
+                            <th>
+                                Giá
+                            </th>
+
+                            <th>
+                                Số lượng
+                            </th>
+
+                            <th width="150">
+                                Thao tác
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Any())
+                        {
+                            foreach (var item
+                                in Model)
+                            {
+                                <tr>
+
+
+                                    <td>
+
+                                        <img src="/assets/uploads/products/@item.ProductImageUrl"
+                                             class="rounded border"
+                                             style="width:60px;
+                                                    height:60px;
+                                                    object-fit:cover;" />
+
+                                    </td>
+
+                                    <td>
+                                        <span class="fw-bold">
+                                            @item.ProductCode
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+                                            @item.ProductName
+                                        </div>
+
+                                        <small class="text-muted">
+
+                                            @item
+                                            .ProductDescription
+                                        </small>
+
+                                    </td>
+
+                                    <td>
+
+                                        @string.Format(
+                                            "{0:N0} đ",
+                                            item.Price)
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.Quantity
+                                           > 0)
+                                        {
+                                            <span class="
+                                                  badge
+                                                  bg-success">
+
+                                                @item.Quantity
+                                                tồn kho
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="
+                                                  badge
+                                                  bg-danger">
+
+                                                Hết hàng
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <a href="/Admin/Product/Edit/@item.Id"
+                                           class="
+                                           btn
+                                           btn-warning
+                                           btn-sm">
+
+                                            <i class="
+                                               fa-solid
+                                               fa-pen">
+                                            </i>
+                                        </a>
+
+                                        <button type="button"
+                                                class="
+                                                btn
+                                                btn-danger
+                                                btn-sm">
+
+                                            <i class="
+                                               fa-solid
+                                               fa-trash">
+                                            </i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="6"
+                                    class="
+                                    text-center
+                                    text-muted
+                                    py-5">
+
+                                    Không có sản phẩm
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

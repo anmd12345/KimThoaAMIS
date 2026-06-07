@@ -1,0 +1,1179 @@
+﻿@using ManagementKimThoa.DTOs.User
+@using ManagementKimThoa.DTOs.Position
+@using ManagementKimThoa.DTOs.Branch
+@using ManagementKimThoa.DTOs.Role
+@using ManagementKimThoa.Constants
+
+@model UserDto
+
+@{
+    ViewData["Title"] = "Chỉnh sửa nhân sự";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+    var positions = ViewBag.positions as List<PositionDto> ?? new();
+    var branchs = ViewBag.branchs as List<BranchDto> ?? new();
+    var roles = ViewBag.roles as List<RoleDto> ?? new();
+
+}
+
+@section Styles{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+    <style>
+        .select2-container--bootstrap-5 .select2-selection {
+            min-height: 46px;
+            padding: 0.5rem 0.75rem;
+        }
+    </style>
+}
+
+<nav class="mb-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="@RouteConstant.Dashboard">Bảng điều khiển</a>
+        </li>
+
+        <li class="breadcrumb-item">
+            <a href="@RouteConstant.Users">Nhân sự</a>
+        </li>
+
+        <li class="breadcrumb-item active">
+            Chỉnh sửa nhân sự
+        </li>
+    </ol>
+
+
+</nav>
+
+<div class="border-bottom border-translucent mb-5 pb-3">
+
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <h2>
+            Chỉnh sửa nhân sự
+        </h2>
+
+        <div>
+
+            <a href="@($"{RouteConstant.ViewUser}/{Model.Id}")"
+               class="btn btn-phoenix-secondary me-2">
+
+                Hủy
+
+            </a>
+
+            <button type="submit"
+                    form="employeeForm"
+                    class="btn btn-primary">
+
+                Lưu thay đổi
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<form id="employeeForm"
+      method="post"
+      enctype="multipart/form-data"
+      action="@RouteConstant.EditUser">
+
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="Id"
+           value="@Model.Id" />
+
+    <!-- AVATAR -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Ảnh đại diện</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="d-flex flex-column align-items-center">
+
+                <input type="file"
+                       id="avatarInput"
+                       name="AvatarFile"
+                       class="d-none"
+                       accept="image/*" />
+
+                <label for="avatarInput">
+
+                    <img id="avatarPreview"
+                         src="@(string.IsNullOrWhiteSpace(Model.OtherInfor?.AvatarUrl)
+                        ? "/assets/img/defaults/avatars/default-avatar.png"
+                        : $"/assets/uploads/avatars/{Model.OtherInfor.AvatarUrl}")"
+                         class="rounded-circle border shadow"
+                         style="width:180px;height:180px;object-fit:cover;" />
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PROFILE SCAN -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Hồ sơ scan</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (!string.IsNullOrWhiteSpace(Model.OtherInfor?.ProfileScanUrl))
+            {
+                <div class="alert alert-phoenix-info">
+
+                    Hồ sơ hiện tại:
+
+                    <a href="@($"{RouteConstant.ProfileScan}/{Model.Id}")"
+                       target="_blank">
+
+                        Xem hồ sơ
+
+                    </a>
+
+                </div>
+            }
+
+            <input type="file"
+                   id="profileScanInput"
+                   name="ProfileScanFile"
+                   class="form-control"
+                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+
+        </div>
+
+    </div>
+
+    <!-- ACCOUNT -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Tài khoản đăng nhập</h4>
+        </div>
+
+        <div class="card-body row g-3">
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.Account?.Username"
+                           readonly />
+
+                    <label>Tên đăng nhập</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="password"
+                           name="Account.Password"
+                           class="form-control"
+                           placeholder="Để trống nếu không đổi" />
+
+                    <label>Mật khẩu mới</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="form-floating">
+
+                    <select name="Role.Id"
+                            class="form-select">
+
+                        <option value="">
+                            -- Chọn vai trò --
+                        </option>
+
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role.Id"
+                                    selected="@(Model.Role?.Id == role.Id)">
+
+                                @role.RoleName
+
+                            </option>
+                        }
+
+                    </select>
+
+                    <label>Vai trò</label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- THÔNG TIN CÁ NHÂN -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Thông tin cá nhân</h4>
+        </div>
+
+        <div class="card-body row g-3">
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="IDCard.FullName"
+                           class="form-control"
+                           value="@Model.IDCard?.FullName" />
+
+                    <label>Họ và tên</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="date"
+                           name="IDCard.DateOfBirth"
+                           class="form-control"
+                           value="@Model.IDCard?.DateOfBirth" />
+
+                    <label>Ngày sinh</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <select id="homeTown"
+                            name="IDCard.HomeTown"
+                            class="form-select select2">
+
+                        <option value="@Model.IDCard?.HomeTown">
+                            @Model.IDCard?.HomeTown
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <select name="IDCard.Gender"
+                            class="form-select">
+
+                        <option value="Nam"
+                                selected="@(Model.IDCard?.Gender=="Nam")">
+                            Nam
+                        </option>
+
+                        <option value="Nữ"
+                                selected="@(Model.IDCard?.Gender=="Nữ")">
+                            Nữ
+                        </option>
+
+                        <option value="Khác"
+                                selected="@(Model.IDCard?.Gender=="Khác")">
+                            Khác
+                        </option>
+
+                    </select>
+
+                    <label>Giới tính</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="IDCard.Nationality"
+                           class="form-control"
+                           value="@Model.IDCard?.Nationality" />
+
+                    <label>Quốc tịch</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="IDCard.IDCardNumber"
+                           class="form-control"
+                           value="@Model.IDCard?.IDCardNumber" />
+
+                    <label>Số CCCD</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="date"
+                           name="IDCard.DateOfIssue"
+                           class="form-control"
+                           value="@Model.IDCard?.DateOfIssue" />
+
+                    <label>Ngày cấp</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="IDCard.IssueAuthor"
+                           class="form-control"
+                           value="@Model.IDCard?.IssueAuthor" />
+
+                    <label>Nơi cấp</label>
+
+                </div>
+
+            </div>
+
+
+            <!-- ĐỊA CHỈ THƯỜNG TRÚ -->
+
+            <hr />
+
+            <h4>Địa chỉ thường trú</h4>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select id="province"
+                            name="IDCard.Provinces"
+                            class="form-select select2">
+
+                        <option value="@Model.IDCard?.Provinces">
+                            @Model.IDCard?.Provinces
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select id="ward"
+                            name="IDCard.Ward"
+                            class="form-select select2">
+
+                        <option value="@Model.IDCard?.Ward">
+                            @Model.IDCard?.Ward
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-12">
+
+                <div class="form-floating">
+
+                    <textarea class="form-control"
+                              name="IDCard.AddressDescription"
+                              style="height:120px">@Model.IDCard?.AddressDescription</textarea>
+
+                    <label>Địa chỉ chi tiết</label>
+
+                </div>
+
+            </div>
+
+            <!-- KHAI SINH -->
+
+            <hr />
+
+            <h4>Nơi đăng ký khai sinh</h4>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select id="birthProvince"
+                            name="OtherInfor.PlaceOfBirthRegistrationProvince"
+                            class="form-select select2">
+
+                        <option value="@Model.OtherInfor?.PlaceOfBirthRegistrationProvince">
+                            @Model.OtherInfor?.PlaceOfBirthRegistrationProvince
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select id="birthWard"
+                            name="OtherInfor.PlaceOfBirthRegistrationWard"
+                            class="form-select select2">
+
+                        <option value="@Model.OtherInfor?.PlaceOfBirthRegistrationWard">
+                            @Model.OtherInfor?.PlaceOfBirthRegistrationWard
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-12">
+
+                <div class="form-floating">
+
+                    <textarea class="form-control"
+                              name="OtherInfor.PlaceOfBirthRegistrationDetail"
+                              style="height:120px">@Model.OtherInfor?.PlaceOfBirthRegistrationDetail</textarea>
+
+                    <label>Địa chỉ chi tiết</label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- THÔNG TIN LÀM VIỆC -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Thông tin làm việc</h4>
+        </div>
+
+        <div class="card-body row g-3">
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="OtherInfor.Phone"
+                           class="form-control"
+                           value="@Model.OtherInfor?.Phone" />
+
+                    <label>Số điện thoại</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <input type="email"
+                           name="OtherInfor.Email"
+                           class="form-control"
+                           value="@Model.OtherInfor?.Email" />
+
+                    <label>Email</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="form-floating">
+
+                    <input type="date"
+                           name="OtherInfor.StartWorkDate"
+                           class="form-control"
+                           value="@Model.OtherInfor?.StartWorkDate" />
+
+                    <label>Ngày vào làm</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select name="OtherInfor.Position.Id"
+                            class="form-select">
+
+                        <option value="">
+                            -- Chọn chức vụ --
+                        </option>
+
+                        @foreach (var position in positions)
+                        {
+                            <option value="@position.Id"
+                                    selected="@(Model.OtherInfor?.Position?.Id == position.Id)">
+                                @position.PositionName
+                            </option>
+                        }
+
+                    </select>
+
+                    <label>Chức vụ</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-floating">
+
+                    <select name="OtherInfor.Branch.Id"
+                            class="form-select">
+
+                        <option value="">
+                            -- Chọn chi nhánh --
+                        </option>
+
+                        @foreach (var branch in branchs)
+                        {
+                            <option value="@branch.Id"
+                                    selected="@(Model.OtherInfor?.Branch?.Id == branch.Id)">
+                                @branch.BranchName
+                            </option>
+                        }
+
+                    </select>
+
+                    <label>Chi nhánh</label>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <!-- BHXH -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Bảo hiểm xã hội</h4>
+        </div>
+
+        <div class="card-body row g-3">
+            <div class="col-md-4">
+
+                <div class="form-check form-switch mt-3">
+                    <input id="isInsurance" class="form-check-input"
+                           type="checkbox"
+                           name="OtherInfor.IsInsurance"
+                           value="true"
+                           @(Model.OtherInfor?.IsInsurance == true ? "checked" : "") />
+
+                    <label class="form-check-label" for="isInsurance">
+                        Đã tham gia BHXH
+                    </label>
+
+                </div>
+
+            </div>
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="HealthInsurance.HealthInsuranceNumber"
+                           class="form-control"
+                           value="@Model.HealthInsurance?.HealthInsuranceNumber" />
+
+                    <label>Số BHXH</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="HealthInsurance.HospitalRegistration"
+                           class="form-control"
+                           value="@Model.HealthInsurance?.HospitalRegistration" />
+
+                    <label>Nơi đăng ký KCB</label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- NGÂN HÀNG -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h4>Thông tin ngân hàng</h4>
+        </div>
+
+        <div class="card-body row g-3">
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="BankInfo.Cardholder"
+                           class="form-control"
+                           value="@Model.BankInfo?.Cardholder" />
+
+                    <label>Chủ tài khoản</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-floating">
+
+                    <input type="text"
+                           name="BankInfo.CardNumber"
+                           class="form-control"
+                           value="@Model.BankInfo?.CardNumber" />
+
+                    <label>Số tài khoản</label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating">
+
+                    <select name="BankInfo.BankName" class="form-select select2">
+                        <option value="">-- Chọn ngân hàng --</option>
+
+                        <optgroup label="Nhóm Big 4">
+                            <option value="Vietcombank" selected="@(Model.BankInfo?.BankName == "Vietcombank")">Vietcombank</option>
+                            <option value="VietinBank" selected="@(Model.BankInfo?.BankName == "VietinBank")">VietinBank</option>
+                            <option value="BIDV" selected="@(Model.BankInfo?.BankName == "BIDV")">BIDV</option>
+                            <option value="Agribank" selected="@(Model.BankInfo?.BankName == "Agribank")">Agribank</option>
+                        </optgroup>
+
+                        <optgroup label="Nhóm TMCP Phổ biến">
+                            <option value="Techcombank" selected="@(Model.BankInfo?.BankName == "Techcombank")">Techcombank</option>
+                            <option value="MB Bank" selected="@(Model.BankInfo?.BankName == "MB Bank")">MB Bank</option>
+                            <option value="VPBank" selected="@(Model.BankInfo?.BankName == "VPBank")">VPBank</option>
+                            <option value="ACB" selected="@(Model.BankInfo?.BankName == "ACB")">ACB</option>
+                            <option value="Sacombank" selected="@(Model.BankInfo?.BankName == "Sacombank")">Sacombank</option>
+                            <option value="HDBank" selected="@(Model.BankInfo?.BankName == "HDBank")">HDBank</option>
+                            <option value="VIB" selected="@(Model.BankInfo?.BankName == "VIB")">VIB</option>
+                            <option value="TPBank" selected="@(Model.BankInfo?.BankName == "TPBank")">TPBank</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- NOTES -->
+
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between">
+
+            <h4>Ghi chú</h4>
+
+            <button type="button"
+                    id="btnAddNote"
+                    class="btn btn-primary btn-sm">
+
+                Thêm ghi chú
+
+            </button>
+
+        </div>
+
+        <div class="card-body">
+
+            <div id="noteContainer">
+
+                @for (int i = 0; i < Model.Notes.Count; i++)
+                {
+                    <div class="border rounded p-3 mb-3 note-item">
+                        <input type="hidden"
+                               name="Notes.Index"
+                               value="@i" />
+                        <input type="hidden"
+                               name="Notes[@i].Id"
+                               value="@Model.Notes[i]?.Id" />
+                        <input type="hidden"
+                               class="note-delete-flag"
+                               name="Notes[@i].IsDeleted"
+                               value="false" />
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <small>
+                                @(Model.Notes[i]?.DateCreateNote)
+                            </small>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm btn-delete-note">
+
+                                Xóa
+
+                            </button>
+
+                        </div>
+                        <div class="mb-3">
+
+                            <input type="text"
+                                   class="form-control"
+                                   name="Notes[@i].NoteTitle"
+                                   value="@Model.Notes[i]?.NoteTitle"
+                                   placeholder="Tiêu đề" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <textarea class="form-control note-editor"
+                                      rows="4"
+                                      name="Notes[@i].NoteDescription">@Model.Notes[i]?.NoteDescription</textarea>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</form>
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/knomrrtoejbhyvpv9jjulyqaj0ndmqzvy2dxq64mr7co0wz8/tinymce/8/tinymce.min.js"
+            referrerpolicy="origin"
+            crossorigin="anonymous"></script>
+    <script src="/assets/js/province.js"></script>
+
+    <script>
+
+        $('#employeeForm').submit(function () {
+
+            tinymce.triggerSave();
+
+        });
+
+        $(document).on('click', '.btn-delete-note', function () {
+
+            if (!confirm('Bạn có chắc muốn xóa ghi chú này?'))
+                return;
+
+            const noteItem = $(this).closest('.note-item');
+
+            const noteId =
+                noteItem.find('input[name$=".Id"]').val();
+
+            if (noteId) {
+
+                noteItem.find('.note-delete-flag')
+                    .val('true');
+
+                noteItem.hide();
+
+            } else {
+
+                noteItem.find('input[name$=".IsDeleted"]')
+                    .val('true');
+                noteItem.hide();
+
+            }
+
+        });
+
+$(document).ready(function(){
+
+    $('.select2').select2({
+        theme:'bootstrap-5',
+        width:'100%'
+    });
+
+    initTinyMce('.note-editor');
+
+    let noteIndex = @Model.Notes.Count;
+
+    $('#btnAddNote').click(function () {
+
+        const editorId = `note-editor-${noteIndex}`;
+
+        $('#noteContainer').prepend(`
+        <input type="hidden"
+       name="Notes.Index"
+       value="${noteIndex}" />
+
+        <div class="border rounded p-3 mb-3 note-item">
+
+            <div class="mb-3">
+
+                <input type="text"
+                       class="form-control"
+                       name="Notes[${noteIndex}].NoteTitle"
+                       placeholder="Tiêu đề">
+
+            </div>
+
+            <input type="hidden"
+       name="Notes[${noteIndex}].IsDeleted"
+       value="false" />
+
+            <div class="mb-3">
+
+                <textarea id="${editorId}"
+                          class="form-control note-editor"
+                          rows="4"
+                          name="Notes[${noteIndex}].NoteDescription">
+                </textarea>
+
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+
+    <button type="button"
+            class="btn btn-danger btn-sm btn-delete-note">
+
+        Xóa
+
+    </button>
+
+</div>
+
+        </div>
+
+    `);
+
+        tinymce.init({
+            selector: `#${editorId}`,
+            height: 300,
+
+            plugins: [
+                'anchor',
+                'autolink',
+                'charmap',
+                'codesample',
+                'emoticons',
+                'image',
+                'link',
+                'lists',
+                'media',
+                'searchreplace',
+                'table',
+                'visualblocks',
+                'wordcount'
+            ],
+
+            toolbar:
+                'undo redo | blocks | ' +
+                'bold italic underline | ' +
+                'alignleft aligncenter alignright | ' +
+                'bullist numlist | ' +
+                'link image table | removeformat'
+        });
+
+        noteIndex++;
+
+    });
+
+
+});
+
+function initTinyMce(selector) {
+
+            tinymce.init({
+                selector: selector,
+                height: 300,
+
+                plugins: [
+                    'anchor',
+                    'autolink',
+                    'charmap',
+                    'codesample',
+                    'emoticons',
+                    'image',
+                    'link',
+                    'lists',
+                    'media',
+                    'searchreplace',
+                    'table',
+                    'visualblocks',
+                    'wordcount'
+                ],
+
+                toolbar:
+                    'undo redo | blocks | ' +
+                    'bold italic underline | ' +
+                    'alignleft aligncenter alignright | ' +
+                    'bullist numlist | ' +
+                    'link image table | removeformat'
+            });
+
+        }
+
+document.getElementById("avatarInput")?.addEventListener("change", function(e){
+
+
+const file = e.target.files[0];
+
+if(!file) return;
+
+const reader = new FileReader();
+
+reader.onload = function(event){
+
+    document.getElementById("avatarPreview").src =
+        event.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+
+});
+
+    </script>
+
+    <script>
+        let provinces = [];
+    const currentProvince =
+    '@Html.Raw(Model.IDCard?.Provinces ?? "")';
+
+const currentWard =
+    '@Html.Raw(Model.IDCard?.Ward ?? "")';
+
+const currentBirthProvince =
+    '@Html.Raw(Model.OtherInfor?.PlaceOfBirthRegistrationProvince ?? "")';
+
+const currentBirthWard =
+    '@Html.Raw(Model.OtherInfor?.PlaceOfBirthRegistrationWard ?? "")';
+
+const currentHomeTown =
+    '@Html.Raw(Model.IDCard?.HomeTown ?? "")';
+
+$(document).ready(function () {
+
+    provinces = getProvinces();
+
+    loadProvinceOptions();
+
+    $('.select2').select2({
+        theme: 'bootstrap-5',
+        width: '100%'
+    });
+
+    // Set giá trị hiện tại
+
+    $('#homeTown')
+        .val(currentHomeTown)
+        .trigger('change');
+
+    $('#province')
+        .val(currentProvince)
+        .trigger('change');
+
+    $('#birthProvince')
+        .val(currentBirthProvince)
+        .trigger('change');
+
+    // Load ward tương ứng
+
+    loadWardsByProvinceName(
+        currentProvince,
+        '#ward',
+        currentWard
+    );
+
+    loadWardsByProvinceName(
+        currentBirthProvince,
+        '#birthWard',
+        currentBirthWard
+    );
+
+    // Change events
+
+    $('#province').on('change', function () {
+
+        loadWardsByProvinceName(
+            $(this).val(),
+            '#ward'
+        );
+
+    });
+
+    $('#birthProvince').on('change', function () {
+
+        loadWardsByProvinceName(
+            $(this).val(),
+            '#birthWard'
+        );
+
+    });
+
+});
+
+
+        function loadProvinceOptions() {
+
+            const html = provinces
+                .map(p => `
+            <option value="${p.name}">
+                ${p.name}
+            </option>
+        `)
+                .join('');
+
+            $('#province,#birthProvince,#homeTown')
+                .append(html);
+        }
+
+        function loadWardsByProvinceName(
+            provinceName,
+            wardSelector,
+            selectedWard = null
+        ) {
+
+            const wardSelect = $(wardSelector);
+
+            wardSelect.empty();
+
+            wardSelect.append(`
+        <option value="">
+            -- Chọn Phường/Xã --
+        </option>
+    `);
+
+            if (!provinceName) {
+
+                wardSelect.prop('disabled', true);
+
+                return;
+            }
+
+            const province =
+                provinces.find(
+                    x => x.name === provinceName
+                );
+
+            if (!province) {
+
+                wardSelect.prop('disabled', true);
+
+                return;
+            }
+
+            let html = '';
+
+            province.wards.forEach(ward => {
+
+                const selected =
+                    ward.name === selectedWard
+                        ? 'selected'
+                        : '';
+
+                html += `
+            <option
+                value="${ward.name}"
+                ${selected}>
+                ${ward.name}
+            </option>
+        `;
+            });
+
+            wardSelect
+                .append(html)
+                .prop('disabled', false)
+                .trigger('change');
+        }
+    </script>
+
+
+
+
+
+}

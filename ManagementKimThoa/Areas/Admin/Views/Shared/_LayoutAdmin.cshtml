@@ -11,7 +11,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>@ViewData["Title"] - KIM THOA ASIM</title>
+    <title>@ViewData["Title"] - KIM THOA AMIS</title>
 
     <!-- ===============================================-->
     <!--    Favicons-->
@@ -98,9 +98,13 @@
     <script src="~/vendors/feather-icons/feather.min.js"></script>
     <script src="~/vendors/dayjs/dayjs.min.js"></script>
     <script src="~/vendors/choices/choices.min.js"></script>
-    <script src="~/vendors/flatpickr/flatpickr.min.js"></script>
-    <script src="~/assets/js/phoenix.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/vendors/flatpickr/flatpickr.min.js"></script>
+
+
+    <script src="~/assets/js/phoenix.js"></script>
+
     <script>document.addEventListener("DOMContentLoaded", function () {
             const toastElList = document.querySelectorAll('.toast-item');
             toastElList.forEach(function (item) {

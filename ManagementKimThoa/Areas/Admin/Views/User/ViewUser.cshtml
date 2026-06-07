@@ -1,0 +1,666 @@
+﻿
+@using ManagementKimThoa.DTOs.User
+@using ManagementKimThoa.Constants
+@using Microsoft.AspNetCore.Html
+@model UserDto
+
+@{
+    ViewData["Title"] = "Chi tiết nhân sự";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@functions {
+    public IHtmlContent DisplayValue(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new HtmlString(
+                "<span class='badge badge-phoenix badge-phoenix-warning'>Chưa có dữ liệu</span>");
+        }
+
+        return new HtmlString(value);
+    }
+}
+
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="@RouteConstant.Dashboard">Bảng điều khiển</a></li>
+        <li class="breadcrumb-item active">Nhân sự</li>
+        <li class="breadcrumb-item"><a href="@RouteConstant.Users">Danh sách nhân sự</a></li>
+        <li class="breadcrumb-item active">@Model.UserCode</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row align-items-center justify-content-between g-3 mb-4">
+
+        <div class="col-auto">
+            <h2 class="mb-0">
+                Chi tiết nhân sự
+            </h2>
+        </div>
+
+        <div class="col-auto">
+
+            <div class="row g-2">
+
+                <div class="col-auto">
+                    <a href="@($"{RouteConstant.EditUser}/{Model.Id}")"
+                       class="btn btn-phoenix-info">
+                        <i class="fas fa-pen me-2"></i>
+                        Chỉnh sửa
+                    </a>
+                </div>
+
+                <div class="col-auto">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.OtherInfor?.ProfileScanUrl))
+                    {
+                        <a href="@($"{RouteConstant.ProfileScan}/{Model.Id}")"
+                           class="btn btn-phoenix-primary">
+                            <i class="fas fa-file me-2"></i>
+                            Hồ sơ scan
+                        </a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-phoenix-secondary" disabled>
+                            Chưa có hồ sơ scan
+                        </button>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-5">
+
+        <!-- LEFT -->
+        <div class="col-xl-4">
+
+            <!-- Hồ sơ -->
+            <div class="card mb-3">
+
+                <div class="card-body text-center">
+
+                    <img class="rounded-circle mb-3"
+                         width="150"
+                         src="@(string.IsNullOrWhiteSpace(Model.OtherInfor?.AvatarUrl)
+                ? "/assets/img/defaults/avatars/default-avatar.png"
+                : $"/assets/uploads/avatars/{Model.OtherInfor.AvatarUrl}")" alt="Avatar not found..."/>
+
+                    <h3>
+                        @(Model.IDCard?.FullName ?? "Chưa có dữ liệu")
+                    </h3>
+
+                    <p class="text-body-secondary">
+                        @("@"+Model.UserCode)
+                    </p>
+
+                    <span class="badge badge-phoenix badge-phoenix-info">
+                        @(Model.Role?.RoleName ?? "Chưa có chức vụ")
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- Liên hệ -->
+            <div class="card mb-3">
+
+                <div class="card-body">
+
+                    <h4>Liên hệ & tài khoản</h4>
+
+                    <hr />
+
+                    <p>
+                        <strong>Email:</strong>
+                        @(Model.OtherInfor?.Email ?? "Chưa có dữ liệu")
+                    </p>
+
+                    <p>
+                        <strong>Số điện thoại:</strong>
+                        @(Model.OtherInfor?.Phone ?? "Chưa có dữ liệu")
+                    </p>
+
+                    <p>
+                        <strong>Chi nhánh:</strong>
+                        @(Model.OtherInfor?.Branch?.BranchName ?? "Chưa có dữ liệu")
+                    </p>
+
+                    <p>
+                        <strong>Tài khoản:</strong>
+                        @(Model.Account?.Username ?? "Chưa có dữ liệu")
+                    </p>
+
+                    <p>
+                        <strong>Vai trò:</strong>
+                        @(Model.Role?.RoleName ?? "Chưa có dữ liệu")
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-xl-8">
+
+            <!-- CCCD -->
+            <div class="card mb-3">
+
+                <div class="card-header">
+                    <h4>Thông tin cá nhân</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Họ tên:</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.FullName))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.FullName
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>CCCD:</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.IDCardNumber))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.IDCardNumber
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Ngày sinh:</strong>
+
+                            <div>
+                                @if (Model != null && Model.IDCard != null && !string.IsNullOrEmpty(Model.IDCard.DateOfBirth))
+                                {
+                                    @DateTime.Parse(Model.IDCard?.DateOfBirth).ToString("dd/MM/yyyy")
+                                }
+                                else
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Giới tính:</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.Gender))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.Gender
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Quốc tịch:</strong>
+                            <div>
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.Nationality))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.Nationality
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Quê quán:</strong>
+                            <div>
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.HomeTown))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.HomeTown
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Ngày cấp CCCD:</strong>
+                            <div>
+                                @if (Model != null && Model.IDCard != null && !string.IsNullOrEmpty(Model.IDCard.DateOfIssue))
+                                {
+                                    @DateTime.Parse(Model.IDCard?.DateOfIssue).ToString("dd/MM/yyyy")
+
+                                }
+                                else
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Nơi cấp:</strong>
+                            <div>
+                                @if (string.IsNullOrEmpty(Model?.IDCard?.IssueAuthor))
+                                {
+
+
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.IDCard?.IssueAuthor
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card mb-3">
+
+                <div class="card-header">
+                    <h4>Địa chỉ</h4>
+                </div>
+
+                <div class="card-body">
+                    @*@{
+
+            string permanentAddress = string.IsNullOrEmpty(Model?.IDCard?.AddressDescription) ?
+                "" : Model?.IDCard?.AddressDescription + ", ";
+            permanentAddress += string.IsNullOrEmpty(Model?.IDCard?.Ward) ?
+                "" : Model?.IDCard?.Ward + ", ";
+
+            permanentAddress += string.IsNullOrEmpty(Model?.IDCard?.Provinces) ?
+                "" : Model.IDCard?.Provinces;
+        }
+        <p>
+            <strong>Thường trú:</strong>
+            @if (string.IsNullOrEmpty(permanentAddress))
+            {
+                <span class="badge badge-phoenix badge-phoenix-warning">
+                    Chưa cập nhật
+                </span>
+            }
+            else
+            {
+                @permanentAddress
+            }
+        </p>*@
+
+                    @*<p>
+            @{
+                string placeOfBirthRegistration = string.IsNullOrEmpty(Model?.OtherInfor?.PlaceOfBirthRegistrationDetail) ?
+                    "" : Model?.OtherInfor?.PlaceOfBirthRegistrationDetail + ", ";
+                placeOfBirthRegistration += string.IsNullOrEmpty(Model?.OtherInfor?.PlaceOfBirthRegistrationWard) ?
+                                    "" : Model?.OtherInfor?.PlaceOfBirthRegistrationWard + ", ";
+
+                placeOfBirthRegistration += string.IsNullOrEmpty(Model?.OtherInfor?.PlaceOfBirthRegistrationProvince) ?
+                                    "" : Model?.OtherInfor?.PlaceOfBirthRegistrationProvince;
+            }
+            <strong>Nơi đăng ký khai sinh: </strong>
+            @if (string.IsNullOrEmpty(placeOfBirthRegistration))
+            {
+                <span class="badge badge-phoenix badge-phoenix-warning">
+                    Chưa cập nhật
+                </span>
+            }
+            else
+            {
+                @placeOfBirthRegistration
+            }
+        </p>*@
+
+                    <div class="col-md-6 mb-3">
+                        <strong>Địa chỉ thường trú:</strong>
+
+                        <div class="mt-2">
+                            <div>
+                                <i>Tỉnh/Thành phố:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.IDCard?.Provinces)
+                ? "Chưa cập nhật"
+                : Model.IDCard.Provinces)
+                            </div>
+
+                            <div>
+                                <i>Phường/Xã:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.IDCard?.Ward)
+                ? "Chưa cập nhật"
+                : Model.IDCard.Ward)
+                            </div>
+
+                            <div>
+                                <i>Địa chỉ chi tiết:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.IDCard?.AddressDescription)
+                ? "Chưa cập nhật"
+                : Model.IDCard.AddressDescription)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <strong>Nơi đăng ký khai sinh:</strong>
+
+                        <ul class="list-unstyled mt-2 mb-0">
+                            <li>
+                                <i class="text-body-secondary">Tỉnh/Thành phố:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.OtherInfor?.PlaceOfBirthRegistrationProvince)
+                ? "Chưa cập nhật"
+                : Model.OtherInfor.PlaceOfBirthRegistrationProvince)
+                            </li>
+
+                            <li>
+                                <i class="text-body-secondary">Phường/Xã:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.OtherInfor?.PlaceOfBirthRegistrationWard)
+                ? "Chưa cập nhật"
+                : Model.OtherInfor.PlaceOfBirthRegistrationWard)
+                            </li>
+
+                            <li>
+                                <i class="text-body-secondary">Địa chỉ chi tiết:</i>
+                                @(string.IsNullOrWhiteSpace(Model?.OtherInfor?.PlaceOfBirthRegistrationDetail)
+                ? "Chưa cập nhật"
+                : Model.OtherInfor.PlaceOfBirthRegistrationDetail)
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="card mb-3">
+
+                <div class="card-header">
+                    <h4>Thông tin làm việc</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <strong>Chức vụ</strong>
+                            <div>
+                                @if (string.IsNullOrEmpty(Model?.Role?.RoleName))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.Role?.RoleName
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Chi nhánh</strong>
+                            <div>
+                                @if (string.IsNullOrEmpty(Model?.OtherInfor?.Branch?.BranchName))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.OtherInfor?.Branch?.BranchName
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Ngày vào làm</strong>
+                            <div>
+                                @if (Model != null && Model.OtherInfor != null && !string.IsNullOrEmpty(Model.OtherInfor.StartWorkDate))
+                                {
+                                    @DateTime.Parse(Model?.OtherInfor?.StartWorkDate).ToString("dd/MM/yyyy")
+                                }
+                                else
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BHXH -->
+            <div class="card mb-3">
+
+                <div class="card-header">
+
+                    <h4>
+
+                        Bảo hiểm xã hội
+
+                        @if (Model.OtherInfor?.IsInsurance == true)
+                        {
+                            <span class="badge badge-phoenix badge-phoenix-success">
+                                Đã tham gia
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-phoenix badge-phoenix-danger">
+                                Chưa tham gia
+                            </span>
+                        }
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <strong>Số BHXH</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.HealthInsurance?.HealthInsuranceNumber))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.HealthInsurance?.HealthInsuranceNumber
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Nơi đăng ký KCB</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.HealthInsurance?.HospitalRegistration))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.HealthInsurance?.HospitalRegistration
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- Ngân hàng -->
+            <div class="card mb-3">
+
+                <div class="card-header">
+                    <h4>Thông tin ngân hàng</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <strong>Chủ tài khoản</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.BankInfo?.Cardholder))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.BankInfo?.Cardholder
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Số tài khoản</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(@Model?.BankInfo?.CardNumber))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.BankInfo?.CardNumber
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Ngân hàng</strong>
+                            <div>
+
+                                @if (string.IsNullOrEmpty(Model?.BankInfo?.BankName))
+                                {
+                                    <span class="badge badge-phoenix badge-phoenix-warning">
+                                        Chưa cập nhật
+                                    </span>
+                                }
+                                else
+                                {
+                                    @Model.BankInfo?.BankName
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="card">
+
+                <div class="card-header">
+                    <h4>Ghi chú</h4>
+                </div>
+
+                <div class="card-body">
+
+                    @if (Model.Notes.Any())
+                    {
+                        foreach (var note in Model.Notes)
+                        {
+                            <div class="border rounded-3 p-3 mb-3">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <h5>
+                                        @note?.NoteTitle
+                                    </h5>
+
+                                    <span class="badge badge-phoenix badge-phoenix-info">
+                                        @note?.DateCreateNote
+                                    </span>
+
+                                </div>
+
+                                <div>
+                                    @Html.Raw(note?.NoteDescription)
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <span class="badge badge-phoenix badge-phoenix-warning">
+                            Chưa có ghi chú
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

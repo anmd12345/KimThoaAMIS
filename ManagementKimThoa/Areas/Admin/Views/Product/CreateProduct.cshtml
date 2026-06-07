@@ -1,0 +1,171 @@
+﻿@model ManagementKimThoa.DTOs.Product.ProductDto
+@using ManagementKimThoa.Constants
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="content">
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header border-bottom">
+            <h4 class="mb-0 fw-bold">
+                Thêm sản phẩm
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form action="@RouteConstant.CreateProduct"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="row">
+
+                    <!-- Upload image -->
+                    <div class="col-md-4">
+
+                        <div class="text-center mb-3">
+
+                            <img id="previewImage"
+                                 src="/assets/img/bgs/37.png"
+                                 class="img-thumbnail rounded"
+                                 style="width:250px;
+                                        height:250px;
+                                        object-fit:cover;" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Ảnh sản phẩm
+                            </label>
+
+                            <input type="file"
+                                   name="ProductImage"
+                                   id="imageFile"
+                                   class="form-control"
+                                   accept="image/*" />
+                        </div>
+
+                    </div>
+
+                    <!-- Form -->
+                    <div class="col-md-8">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+                                Tên sản phẩm
+                            </label>
+
+                            <input type="text"
+                                   name="ProductName"
+                                   value="@Model?.ProductName"
+                                   class="form-control"
+                                   placeholder="Nhập tên sản phẩm" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+                                Mô tả
+                            </label>
+
+                            <textarea name="ProductDescription"
+                                      rows="4"
+                                      class="form-control"
+                                      placeholder="Nhập mô tả sản phẩm">@Model?.ProductDescription</textarea>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+                                        Giá
+                                    </label>
+
+                                    <input type="number"
+                                           step="0.01"
+                                           name="Price"
+                                           value="@Model?.Price"
+                                           class="form-control" />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+                                        Số lượng
+                                    </label>
+
+                                    <input type="number"
+                                           name="Quantity"
+                                           value="@Model?.Quantity"
+                                           class="form-control" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="border-top pt-3 text-end">
+
+                    <a href="/Admin/Product"
+                       class="btn btn-secondary">
+                        Quay lại
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fa-solid fa-plus me-1"></i>
+                        Thêm sản phẩm
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>document
+        .getElementById('imageFile')
+        .addEventListener('change', function (e) {
+
+            const file = e.target.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                document
+                    .getElementById(
+                        'previewImage'
+                    )
+                    .src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });</script>

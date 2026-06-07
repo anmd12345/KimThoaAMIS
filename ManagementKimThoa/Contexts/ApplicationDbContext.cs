@@ -30,11 +30,20 @@ namespace ManagementKimThoa.Contexts
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductPromotion> ProductPromotions { get; set; }
+
+        public DbSet<Promotion> Promotions { get; set; }
+
+        public DbSet<Gift> Gifts { get; set; }
+
+        public DbSet<GiftProduct> GiftProducts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Tự động load tất cả IEntityTypeConfiguration
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
